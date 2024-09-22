@@ -3,8 +3,11 @@ import React from 'react';
 function Footer() {
     return (
         <footer>
-            <p>Developer: Maria Mae Kiskis</p>
-            <p><a href="#">22105083@usc.edu.ph</a></p>
+            <div>
+                <p>Dev: Maria Mae Kiskis</p>
+                <p>22105083@usc.edu.ph</p>
+            </div>
+            <p>&copy; 2024. All rights reserved.</p>
         </footer>
     )
 }

@@ -39,6 +39,19 @@ button:hover {
     display: flex;
 }
 
+.menu-icon {
+    color: var(--orange-color);
+    margin-right: 20px;
+}
+
+.user-menu-profile {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: relative;
+    top: 10px;
+}
+
 .guest-options p {
     margin: 5px;
 }
@@ -59,10 +72,34 @@ main {
 .post {
     background-color: #222;
     padding: 20px;
-    margin: 30px 50px;
     border-radius: 10px;
+}
+
+.menu {
+    height: 200px;
+    width: 150px;
+    position: fixed;
+    left: 0;
+    top: 100;
+    padding-top: 40px;
+    color: #fff;
+    background-color: red;
+}
+
+.menu ul {
+    display: block;
+}
+
+.create-post-btn {
+    margin-right: 20px;
 }
 
 footer {
     background-color: #222;
+    color: #ccc;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
 }

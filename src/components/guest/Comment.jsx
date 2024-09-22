@@ -12,9 +12,12 @@ function Comment(props) {
                 </div>
                 <p className="comment-content">{props.comment.comment}</p>
                 <div className="comment-options">
-                    <p className="comment-likes">{props.comment.likes} Likes</p>
-                    <p className="comment-dislikes">{props.comment.dislikes} Dislikes</p>
-                    <a href="">Reply</a>
+                    <div>
+                        <p className="comment-likes">{props.comment.likes} Likes</p>
+                    </div>
+                    <div>
+                        <p className="comment-dislikes">{props.comment.dislikes} Dislikes</p>
+                    </div>
                 </div>
             </div>
             <div className="replies">
