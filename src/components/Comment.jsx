@@ -6,7 +6,7 @@ function Comment(props) {
         <>
             <div className="comment">
                 <div className="comment-header">
-                    <img src={props.comment.profileImg} alt="" />
+                    <img src={props.comment.profileImg} alt="user profile" />
                     <p className="comment-user-name">{props.comment.username}</p>
                     <p className="comment-date">{props.comment.date}</p>
                 </div>

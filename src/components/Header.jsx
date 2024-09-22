@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 function Header() {
     return (
@@ -9,13 +10,13 @@ function Header() {
                 <button>Search</button>
             </div>
             <div className="guest-options">
-                <a href="http://" rel="noopener noreferrer">
+                <Link to="/login">
                     <button>Login</button>
-                </a>
+                </Link>
                 <p>or</p> 
-                <a href="http://" rel="noopener noreferrer">
+                <Link to="/signup">
                     <button>Register</button>
-                </a>
+                </Link>
             </div>
         </header>
     )

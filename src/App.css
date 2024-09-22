@@ -18,6 +18,8 @@ header {
     border: 2px solid #000;
     border-radius: 10px;
     width: 300px;
+    background-color: #444;
+    color: #fff;
 }
 
 button {
@@ -26,6 +28,11 @@ button {
     border-radius: 5px;
     background-color: var(--orange-color);
     font-size: 0.95rem;
+}
+
+button:hover {
+    transform: scale(0.98);
+    background-color: var(--peach-color);
 }
 
 .guest-options {
