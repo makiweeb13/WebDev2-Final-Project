@@ -18,7 +18,7 @@ function App() {
         <Routes>
           <Route element={<ProtectedRoutes />}>
             <Route  element={<UserDashboard />}>
-              <Route index path="/" element={<MainContent />}/>
+              <Route index path="/home" element={<MainContent />}/>
               <Route path="/profile" element={<Profile />}/>
               <Route path="/create-post" element={<CreatePost />}/>
             </Route>

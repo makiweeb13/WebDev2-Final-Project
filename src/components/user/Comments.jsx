@@ -1,9 +1,14 @@
 import React from "react";
 import Comment from "./Comment";
+import useStore from "../../store/store";
 
-function Comments(props) {
+function Comments({ postId }) {
+    const { comments } = useStore();
+
+    const postComments = comments.filter((comment) => comment.post_id === postId);
+
     const renderComments = () => {
-        return props.comments.map(comment => <Comment key={comment.id} comment={comment} />);
+        return postComments.map(comment => <Comment key={comment.id} comment={comment} />);
     }
 
     return <div className="comments">{renderComments()}</div>
