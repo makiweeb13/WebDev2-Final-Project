@@ -18,12 +18,12 @@ function Header() {
                 <Link>
                     <FontAwesomeIcon icon={faBell} className="menu-icon" />
                 </Link>
-                <Link>
+                <Link to="/create-post">
                     <button className="create-post-btn">
                         <p><FontAwesomeIcon icon={faPlus} /> Create</p>
                     </button>
                 </Link>
-                <Link>
+                <Link to="/profile">
                     <img src="src/assets/profile-icon.png" alt="user profile" className="user-menu-profile"/>
                 </Link>
             </div>

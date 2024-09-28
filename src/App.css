@@ -94,6 +94,10 @@ main {
     margin-right: 20px;
 }
 
+.profile {
+    /* margin-top: 5rem; */
+}
+
 footer {
     background-color: #222;
     color: #ccc;

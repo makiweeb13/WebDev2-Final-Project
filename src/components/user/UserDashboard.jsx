@@ -1,13 +1,13 @@
 import React from 'react';
 import UserHeader from './UserHeader';
-import MainContent from './MainContent';
 import Footer from '../Footer';
+import { Outlet } from 'react-router-dom'
 
 function UserDashboard() {
     return (
         <>
             <UserHeader />
-            <MainContent />
+            <Outlet />
             <Footer />
         </>
     )
