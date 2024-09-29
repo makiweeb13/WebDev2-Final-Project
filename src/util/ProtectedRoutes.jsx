@@ -1,7 +1,13 @@
 import { Outlet, Navigate } from 'react-router-dom'
 
+export const useAuth = () => {
+    // Returns `true` if authenticated, `false` otherwise
+    const isAuthenticated = true;
+    return isAuthenticated;
+  };
+
 const ProtectedRoutes = () => {
-    const user = true // represents whether a user is logged in
+    const user = useAuth(); // represents whether a user is logged in
     return user ? <Outlet /> : <Navigate to="/login" />
 }
 

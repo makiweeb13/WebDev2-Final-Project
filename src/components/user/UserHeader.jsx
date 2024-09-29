@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faHouse, faBell, faPlus } from "@fortawesome/free-solid-svg-icons";
 
-function Header() {
+function UserHeader() {
     return (
         <header>
             <h1>Recco</h1>
@@ -12,7 +12,7 @@ function Header() {
                 <FontAwesomeIcon icon={faMagnifyingGlass} />
             </div>
             <div className="user-options">
-                <Link to="/home">
+                <Link to="/">
                     <FontAwesomeIcon icon={faHouse} className="menu-icon" />
                 </Link>
                 <Link>
@@ -31,4 +31,4 @@ function Header() {
     )
 }
 
-export default Header;
+export default UserHeader;
