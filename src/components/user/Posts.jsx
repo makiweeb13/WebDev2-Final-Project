@@ -9,7 +9,7 @@ function Posts(props) {
         )
     }
 
-    return <div>{renderPosts()}</div>
+    return <div className="posts">{renderPosts()}</div>
 }
 
 export default Posts;

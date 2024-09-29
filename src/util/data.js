@@ -1,4 +1,3 @@
-// initialData.js
 const data = {
     users: [
         {
@@ -50,6 +49,7 @@ const data = {
         {
             id: 1,
             post_id: 101,
+            user_id: 1,
             parent_id: null,
             likes: 25,
             dislikes: 2,
@@ -58,8 +58,9 @@ const data = {
         },
         {
             id: 2,
-            parent_id: 1,
             post_id: 101,
+            user_id: 2,
+            parent_id: 1,
             likes: 5,
             dislikes: 0,
             content: "Totally agree! The ending was wild.",
@@ -68,6 +69,7 @@ const data = {
         {
             id: 3,
             post_id: 102,
+            user_id: 2,
             parent_id: null,
             likes: 40,
             dislikes: 1,
@@ -76,8 +78,9 @@ const data = {
         },
         {
             id: 4,
-            parent_id: 3,
             post_id: 102,
+            user_id: 1,
+            parent_id: 3,
             likes: 15,
             dislikes: 1,
             content: "The plot twists are insane, especially in Season 4.",
@@ -85,8 +88,9 @@ const data = {
         },
         {
             id: 5,
-            parent_id: 3,
             post_id: 102,
+            user_id: 1,
+            parent_id: 3,
             likes: 8,
             dislikes: 0,
             content: "Can't wait for the final season!",

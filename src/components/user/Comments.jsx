@@ -8,7 +8,7 @@ function Comments({ postId }) {
     const postComments = comments.filter((comment) => comment.post_id === postId);
 
     const renderComments = () => {
-        return postComments.map(comment => <Comment key={comment.id} comment={comment} />);
+        return postComments.map(comment => <Comment key={comment.id} comment={comment} commentId={comment.id} userId={comment.user_id}/>);
     }
 
     return <div className="comments">{renderComments()}</div>

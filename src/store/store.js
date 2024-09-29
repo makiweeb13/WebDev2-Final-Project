@@ -14,6 +14,28 @@ const useStore = create((set, get) => ({
         comments: data.comments,
     })),
 
+    // Getting username
+    getUsername: (userId) => {
+        const { users } = get();
+        return users.filter((user) => user.id === userId)[0].username;
+    },
+
+    // Getting parent comment
+    getComment: (parentId) => {
+        const { comments } = get();
+        return comments.filter((comment) => comment.id === parentId)[0];
+    },
+
+    getCommentsNum: (postId) => {
+        const { comments } = get();
+        return comments.filter((comment) => comment.post_id === postId).length;
+    },
+
+    //Getting the date
+    getDate: (date) => {
+        return new Date(date).toLocaleDateString();
+    },
+
     // Actions for Users
     addUser: (user) => set((state) => ({ users: [...state.users, user] })),
     updateUser: (updatedUser) =>

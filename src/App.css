@@ -44,6 +44,10 @@ button:hover {
     margin-right: 20px;
 }
 
+.menu-icon:hover {
+    color: var(--peach-color);
+}
+
 .user-menu-profile {
     width: 30px;
     height: 30px;
@@ -69,10 +73,46 @@ main {
     padding: 20px;
 }
 
+.posts {
+    display: flex;
+    flex-direction: column;
+    
+}
+
 .post {
     background-color: #222;
-    padding: 20px;
+    width: 100%;
     border-radius: 10px;
+    max-width: 800px;
+    align-self: center;
+    padding: 20px;
+}
+
+.user-header {
+    display: flex;
+    justify-content: space-between;
+}
+.comments {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.comment {
+    width: 100%;
+    max-width: 800px;
+    align-self: center;
+}
+
+.user-profile {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user {
+    display: flex;
 }
 
 .menu {
@@ -94,9 +134,17 @@ main {
     margin-right: 20px;
 }
 
-.profile {
-    /* margin-top: 5rem; */
+.options {
+    display: flex;
 }
+
+.options div {
+    display: flex;
+    margin-right: 10px;
+    align-items: center;
+    cursor: pointer;
+}
+
 
 footer {
     background-color: #222;

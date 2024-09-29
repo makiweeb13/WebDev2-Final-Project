@@ -1,7 +1,12 @@
 import React from 'react';
+import useStore from '../../store/store';
 import Comments from './Comments';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faThumbsUp, faThumbsDown, faComment } from "@fortawesome/free-solid-svg-icons";
 
 function Post({ post }) {
+
+    const { getUsername, getDate, getCommentsNum } = useStore();
 
     const displayImages = () => {
         let imgID = 1;
@@ -13,10 +18,12 @@ function Post({ post }) {
     return (
         <>
             <div className="post">
-                <div className="post-header">
-                    <img src="src/assets/profile-icon.png" alt="user profile" className='user-menu-profile'/>
-                    <p className="name"></p>
-                    <p className="date">{post.date}</p>
+                <div className="user-header">
+                    <div className='user'>
+                        <img src="src/assets/profile-icon.png" alt="user profile" className='user-profile'/>
+                        <p className="name">{getUsername(post.user_id)}</p>
+                    </div>
+                    <p className="date">{getDate(post.date)}</p>
                 </div>
                 <div className="post-content">
                     <p className="title">{post.title}</p>
@@ -27,20 +34,23 @@ function Post({ post }) {
                     <p className="synopsis">{post.synopsis}</p>
                     <p className="review">{post.review}</p>
                 </div>
-                <div className="post-options">
+                <div className="options">
                     <div className="likes">
-                        <p>{post.likes} Likes</p>
-                        <a href="">Like</a>
+                        <p>{post.likes}&nbsp;</p>
+                        <FontAwesomeIcon icon={faThumbsUp} className="menu-icon"/>
                     </div>
                     <div className="dislikes">
-                        <p>{post.dislikes} Dislikes</p>
-                        <a href="">Dislike</a>
+                        <p>{post.dislikes}&nbsp;</p>
+                        <FontAwesomeIcon icon={faThumbsDown} className="menu-icon"/>
                     </div>
-                    <a href="">Comments</a>
+                    <div>
+                        <p>{getCommentsNum(post.id)}&nbsp;</p>
+                        <FontAwesomeIcon icon={faComment} className="menu-icon"/>
+                    </div>
                 </div>
                 {/* <div className="images">{displayImages()}</div>*/}
             </div>
-            <Comments postId={post.id}/>
+            <Comments postId={post.id} className="reply"/>
         </>
     )
 }
