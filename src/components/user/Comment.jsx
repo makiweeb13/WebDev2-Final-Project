@@ -4,7 +4,7 @@ import useStore from '../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown, faReply } from "@fortawesome/free-solid-svg-icons";
 
-function Comment({ comment, commentId, userId }) {
+function Comment({ comment, commentId }) {
 
     const { comments, getUsername, getComment, getDate } = useStore();
 
@@ -37,7 +37,7 @@ function Comment({ comment, commentId, userId }) {
                 </div>
             </div>
             <div className="replies">
-                <Comments key={comment.id} comments={replies} commentId={comment.id} userId={comment.user_id}/>
+                <Comments key={comment.id} comments={replies} commentId={comment.id}/>
             </div>
         </>
         

@@ -1,19 +1,19 @@
 import React from "react";
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 function Login() {
     return (
-        <>
-            <Link to="/">Back</Link>
+        <div className="page">
+            <Link to="/"><FontAwesomeIcon icon={faArrowLeft} className="menu-icon"/></Link>
             <form action="login">
-                <label htmlFor="username">Username</label>
-                <input type="username" name="username"/><br />
-                <label htmlFor="password">Password</label>
-                <input type="password" name="password" id="password"/><br />
+                <input type="username" name="username" placeholder="username"/><br />
+                <input type="password" name="password" id="password" placeholder="password"/><br />
                 <button type="submit">Login</button>
-                <p>Don't have an account yet? <Link to="/signup">Create Account</Link></p>
+                <p>Don't have an account yet? <Link to="/signup" className="link">Create Account</Link></p>
             </form>
-        </>
+        </div>
         
     )
 }
