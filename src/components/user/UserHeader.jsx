@@ -9,7 +9,7 @@ function UserHeader() {
             <h1>Recco</h1>
             <div className="search-bar">
                 <input type="search" name="search" id="search" placeholder="title, name of author, characters, ..."/>
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                <FontAwesomeIcon icon={faMagnifyingGlass} className="menu-icon" />
             </div>
             <div className="user-options">
                 <Link to="/">

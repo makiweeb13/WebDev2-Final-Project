@@ -14,6 +14,12 @@ const useStore = create((set, get) => ({
         comments: data.comments,
     })),
 
+    // Get user
+    getUser: (userId) => {
+        const { users } = get();
+        return users.filter((user) => user.id === userId);
+    },
+    
     // Getting username
     getUsername: (userId) => {
         const { users } = get();

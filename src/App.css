@@ -80,7 +80,6 @@ main {
 .posts {
     display: flex;
     flex-direction: column;
-    
 }
 
 .post {
@@ -188,6 +187,109 @@ main {
     text-decoration: none;
 }
 
+.dropdown {
+    margin: 10px 20px 10px 0;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #111;
+    min-width: 200px;
+    box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content label {
+    display: block;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.dropdown-content label:hover {
+    border: 1px solid var(--orange-color);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown-container {
+    display: flex;
+}
+
+.add-post #title {
+    padding: 5px;
+    border-radius: 10px;
+    width: 250px;
+    background-color: #444;
+    color: #fff;
+    margin: 15px 10px;
+}
+
+.add-post #rate {
+    padding: 5px;
+    border-radius: 10px;
+    width: 50px;
+    background-color: #444;
+    color: #fff;
+    margin: 15px 10px;
+}
+
+.add-post #synopsis,
+.add-post #review {
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 700px;
+    width: 100%;
+    background-color: #444;
+    color: #fff;
+    margin: 10px 0;
+}
+ 
+input,
+textarea,
+select {
+    outline: none; 
+    transition: border-color 0.3s ease; 
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--orange-color);
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.profile {
+    text-align: center;
+    background-color: #333;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+.profile img {
+    border-radius: 50%;
+    margin: 50px 0 15px 0;
+}
+
+.profile .bio {
+    padding: 20px;
+}
+
+.edit {
+    float: right;
+    padding: 20px 0;
+}
 footer {
     background-color: #222;
     color: #ccc;

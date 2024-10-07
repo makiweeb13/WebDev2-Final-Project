@@ -7,9 +7,11 @@ import MainContent from './components/user/MainContent';
 import Profile from './components/user/Profile';
 import CreatePost from './components/user/CreatePost';
 import PageNotFound from './components/PageNotFound';
+import useStore from './store/store';
 import './App.css'
 
 function App() {
+  const { users } = useStore();
 
   return (
     <Router>

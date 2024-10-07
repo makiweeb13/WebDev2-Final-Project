@@ -14,7 +14,6 @@ function Login() {
                 <p>Don't have an account yet? <Link to="/signup" className="link">Create Account</Link></p>
             </form>
         </div>
-        
     )
 }
 
