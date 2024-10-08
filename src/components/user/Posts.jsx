@@ -1,6 +1,7 @@
 import React from 'react';
 import Post from './Post';
 import useStore from '../../store/store';
+import { useState, useEffect } from 'react';
 
 function Posts({ userId }) {
 

@@ -9,18 +9,41 @@ import CreatePost from './components/user/CreatePost';
 import PageNotFound from './components/PageNotFound';
 import useStore from './store/store';
 import './App.css'
+import { useState, useEffect } from 'react';
+import ErrorPage from './components/ErrorPage';
 
 function App() {
-  const { users } = useStore();
+  const { initialize } = useStore();
+  const [ isLoading, setIsLoading ] = useState(true);
 
-  return (
+  useEffect(() => {
+    const fetchUsers = fetch('http://localhost:8000/users');
+    const fetchPosts = fetch('http://localhost:8000/posts');
+    const fetchComments = fetch('http://localhost:8000/comments');
+
+    Promise.all([fetchUsers, fetchPosts, fetchComments])
+      .then(async ([userResponse, postsResponse, commentsResponse]) => {
+        const user = await userResponse.json();
+        const posts = await postsResponse.json();
+        const comments = await commentsResponse.json();
+
+        initialize(user, posts, comments);
+        setIsLoading(false);
+      })
+      .catch((error) => console.error('Error fetching data:', error));
+  }, [])
+
+  if (isLoading) {
+    return <p>Loading...</p>
+  } else {
+    return (
     <Router>
       <div className="content">
         <Routes>
           <Route exact path="/" element={<UserDashboard />}>
             <Route index element={<MainContent />}/>
             <Route element={<ProtectedRoutes />}>
-              <Route path="/profile" element={<Profile />}/>
+              <Route path="/profile/:id" element={<Profile />} errorElement={<ErrorPage />}/>
               <Route path="/create-post" element={<CreatePost />}/>
             </Route>
           </Route>
@@ -31,6 +54,7 @@ function App() {
       </div>
     </Router>
   )
+  }
 }
 
 export default App

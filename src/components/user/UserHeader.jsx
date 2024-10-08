@@ -2,8 +2,12 @@ import React from "react";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faHouse, faBell, faPlus } from "@fortawesome/free-solid-svg-icons";
+import profile from '../../assets/profile-icon.png';
 
 function UserHeader() {
+
+    const userId = 1; // temporary current user id
+
     return (
         <header>
             <h1>Recco</h1>
@@ -23,8 +27,8 @@ function UserHeader() {
                         <p><FontAwesomeIcon icon={faPlus} /> Create</p>
                     </button>
                 </Link>
-                <Link to="/profile">
-                    <img src="src/assets/profile-icon.png" alt="user profile" className="user-menu-profile"/>
+                <Link to={`profile/${userId}`}>
+                    <img src={profile} alt="user profile" className="user-menu-profile"/>
                 </Link>
             </div>
         </header>

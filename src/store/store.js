@@ -3,38 +3,38 @@ import data from '../util/data'; //temporary data
 
 // Define the Zustand store
 const useStore = create((set, get) => ({
-    users: data.users,
-    posts: data.posts,
-    comments: data.comments,
+    users: [],
+    posts: [],
+    comments: [],
 
     // Method to set the fetched data into Zustand store
-    initialize: (data) => set(() => ({
-        users: data.users,
-        posts: data.posts,
-        comments: data.comments,
+    initialize: (users, posts, comments) => set(() => ({
+        users: users,
+        posts: posts,
+        comments: comments,
     })),
 
     // Get user
     getUser: (userId) => {
         const { users } = get();
-        return users.filter((user) => user.id === userId);
+        return users.filter((user) => user.id == userId);
     },
-    
+
     // Getting username
     getUsername: (userId) => {
         const { users } = get();
-        return users.filter((user) => user.id === userId)[0].username;
+        return users.filter((user) => user.id == userId)[0].username;
     },
 
     // Getting parent comment
     getComment: (parentId) => {
         const { comments } = get();
-        return comments.filter((comment) => comment.id === parentId)[0];
+        return comments.filter((comment) => comment.id == parentId)[0];
     },
 
     getCommentsNum: (postId) => {
         const { comments } = get();
-        return comments.filter((comment) => comment.post_id === postId).length;
+        return comments.filter((comment) => comment.post_id == postId).length;
     },
 
     //Getting the date
@@ -57,12 +57,14 @@ const useStore = create((set, get) => ({
 
     // Actions for Posts
     addPost: (post) => set((state) => ({ posts: [...state.posts, post] })),
+
     updatePost: (updatedPost) =>
         set((state) => ({
         posts: state.posts.map((post) =>
             post.id === updatedPost.id ? updatedPost : post
         ),
     })),
+
     removePost: (postId) =>
         set((state) => ({
         posts: state.posts.filter((post) => post.id !== postId),

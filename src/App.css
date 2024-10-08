@@ -16,6 +16,10 @@ body {
     background-color: #111;
 }
 
+body::-webkit-scrollbar {
+    display: none;
+}
+
 .search-bar input {
     padding: 10px;
     margin-right: 10px;

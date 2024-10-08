@@ -3,19 +3,20 @@ import Comments from './Comments';
 import useStore from '../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown, faReply } from "@fortawesome/free-solid-svg-icons";
+import profile from '../../assets/profile-icon.png';
 
 function Comment({ comment, commentId }) {
 
     const { comments, getUsername, getComment, getDate } = useStore();
 
-    const replies = comments.filter(comment => comment.parent_id === commentId)
+    const replies = comments.filter(comment => comment.parent_id == commentId)
 
     return (
         <>
             <div className="comment">
                 <div className="user-header">
                     <div className='user'>
-                        <img src="src/assets/profile-icon.png" alt="user profile" className='user-profile'/>
+                        <img src={profile} alt="user profile" className='user-profile'/>
                         <p className="comment-user-name">{getUsername(comment.user_id)}</p>
                         {comment.parent_id && <p>&nbsp;replying to {getUsername(getComment(comment.parent_id).user_id)}</p>}
                     </div>
