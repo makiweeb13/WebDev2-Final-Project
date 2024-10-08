@@ -11,6 +11,7 @@ import useStore from './store/store';
 import './App.css'
 import { useState, useEffect } from 'react';
 import ErrorPage from './components/ErrorPage';
+import PostDetails from './components/user/PostDetails';
 
 function App() {
   const { initialize } = useStore();
@@ -44,6 +45,7 @@ function App() {
             <Route index element={<MainContent />}/>
             <Route element={<ProtectedRoutes />}>
               <Route path="/profile/:id" element={<Profile />} errorElement={<ErrorPage />}/>
+              <Route path="/post/:id" element={<PostDetails />} errorElement={<ErrorPage />}/>
               <Route path="/create-post" element={<CreatePost />}/>
             </Route>
           </Route>

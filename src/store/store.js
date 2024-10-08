@@ -37,6 +37,13 @@ const useStore = create((set, get) => ({
         return comments.filter((comment) => comment.post_id == postId).length;
     },
 
+    getMostPopularComment: (postId) => {
+        const { comments } = get();
+        return comments
+                .filter((comment) => comment.post_id == postId && comment.parent_id == null)
+                .sort((a, b) => a.likes > b.likes ? 1 : a.likes < b.likes ? -1 : 0)[0];
+    },
+
     //Getting the date
     getDate: (date) => {
         return new Date(date).toLocaleDateString();

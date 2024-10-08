@@ -1,12 +1,15 @@
 import useStore from '../../store/store';
-import Comments from './Comments';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown, faComment } from "@fortawesome/free-solid-svg-icons";
 import profile from '../../assets/profile-icon.png';
+import Comment from './Comment';
+import Comments from './Comments';
+import { Link } from 'react-router-dom';
 
-function Post({ post }) {
+function Post({ post, detailedMode }) {
 
-    const { getUsername, getDate, getCommentsNum } = useStore();
+    const { getUsername, getDate, getCommentsNum, getMostPopularComment } = useStore();
+    const popularComment = getMostPopularComment(post.id);
 
     // const displayImages = () => {
     //     let imgID = 1;
@@ -45,12 +48,17 @@ function Post({ post }) {
                     </div>
                     <div>
                         <p>{getCommentsNum(post.id)}&nbsp;</p>
-                        <FontAwesomeIcon icon={faComment} className="menu-icon"/>
+                        <Link to={!detailedMode ? `/post/${post.id}` : ''}>
+                            <FontAwesomeIcon icon={faComment} className="menu-icon"/>
+                        </Link>
                     </div>
                 </div>
                 {/* <div className="images">{displayImages()}</div>*/}
             </div>
-            <Comments postId={post.id} className="reply"/>
+            { detailedMode ? 
+                <Comments postId={post.id} /> :
+                <Comment key={popularComment.id} comment={popularComment} commentId={popularComment.id}/>
+            }
         </>
     )
 }
