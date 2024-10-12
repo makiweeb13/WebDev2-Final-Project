@@ -13,7 +13,7 @@ function Profile() {
     const [ isLoading, setIsLoading ] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost:8000/users/${id}`)
+        fetch(`http://localhost:5000/users/${id}`)
             .then(response => response.json())
             .then(json => {
                 setUser(json);

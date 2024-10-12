@@ -11,7 +11,7 @@ function PostDetails() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:8000/posts/${id}`)
+        fetch(`http://localhost:5000/posts/${id}`)
             .then(response => response.json())
             .then(json => {
                 setPost(json);

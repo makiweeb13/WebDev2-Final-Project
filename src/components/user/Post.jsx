@@ -30,7 +30,7 @@ function Post({ post, detailedMode }) {
                 </div>
                 <div className="post-content">
                     <p className="title">{post.title}</p>
-                    <p className="genres">{post.genre.join(', ')}</p>
+                    <p className="genres">{post.genre}</p>
                     <p className="status">{post.status}</p>
                     <p className="rate">{post.rate}/10</p>
                     <p className="medium">{post.medium}</p>

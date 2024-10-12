@@ -18,9 +18,9 @@ function App() {
   const [ isLoading, setIsLoading ] = useState(true);
 
   useEffect(() => {
-    const fetchUsers = fetch('http://localhost:8000/users');
-    const fetchPosts = fetch('http://localhost:8000/posts');
-    const fetchComments = fetch('http://localhost:8000/comments');
+    const fetchUsers = fetch('http://localhost:5000/users');
+    const fetchPosts = fetch('http://localhost:5000/posts');
+    const fetchComments = fetch('http://localhost:5000/comments');
 
     Promise.all([fetchUsers, fetchPosts, fetchComments])
       .then(async ([userResponse, postsResponse, commentsResponse]) => {
