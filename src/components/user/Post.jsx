@@ -8,9 +8,16 @@ import { Link } from 'react-router-dom';
 
 function Post({ post, detailedMode }) {
 
-    const { getUsername, getDate, getCommentsNum, getMostPopularComment } = useStore();
-    const popularComment = getMostPopularComment(post.id);
-
+    const { getDate } = useStore();
+    const getMostPopularComment = (post) => {
+        if (post.comments) {
+            return post.comments
+                .filter(post => post.parent_id == null)
+                .sort((a, b) => a.likes > b.likes ? 1 : a.likes < b.likes ? -1 : 0)[0];
+        }
+        return null;
+    }
+    const popularComment = getMostPopularComment(post)
     // const displayImages = () => {
     //     let imgID = 1;
     //     if (props.post.images != []) {
@@ -24,7 +31,7 @@ function Post({ post, detailedMode }) {
                 <div className="user-header">
                     <div className='user'>
                         <img src={profile} alt="user profile" className='user-profile'/>
-                        <p className="name">{getUsername(post.user_id)}</p>
+                        <p className="name">{post.users.username}</p>
                     </div>
                     <p className="date">{getDate(post.date)}</p>
                 </div>
@@ -47,7 +54,7 @@ function Post({ post, detailedMode }) {
                         <FontAwesomeIcon icon={faThumbsDown} className="menu-icon"/>
                     </div>
                     <div>
-                        <p>{getCommentsNum(post.id)}&nbsp;</p>
+                        <p>{post.comments.length}&nbsp;</p>
                         <Link to={!detailedMode ? `/post/${post.id}` : ''}>
                             <FontAwesomeIcon icon={faComment} className="menu-icon"/>
                         </Link>
@@ -56,7 +63,7 @@ function Post({ post, detailedMode }) {
                 {/* <div className="images">{displayImages()}</div>*/}
             </div>
             { detailedMode ? 
-                <Comments postId={post.id} /> :
+                <Comments comments={post.comments} /> : 
                 <Comment key={popularComment.id} comment={popularComment} commentId={popularComment.id}/>
             }
         </>

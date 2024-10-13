@@ -18,7 +18,7 @@ function PostDetails() {
                 setIsLoading(false);
             })
             .catch(err => {
-                throw Error('User Not Found')
+                throw Error('Post Not Found')
             })
     }, [id])
 

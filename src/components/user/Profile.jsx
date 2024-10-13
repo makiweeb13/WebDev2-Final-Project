@@ -5,10 +5,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from 'react-router-dom';
 import profile from '../../assets/profile-icon.png';
+import useStore from '../../store/store';
 
 function Profile() {
     
     const { id } = useParams();
+    const { setPosts } = useStore();
     const [ user, setUser ] = useState(null);
     const [ isLoading, setIsLoading ] = useState(true);
 
@@ -17,6 +19,7 @@ function Profile() {
             .then(response => response.json())
             .then(json => {
                 setUser(json);
+                setPosts(json.posts)
                 setIsLoading(false);
             })
             .catch(err => {
@@ -37,7 +40,7 @@ function Profile() {
                     </div>
                 </div>
                 <h2>Posts</h2>
-                <Posts userId={id}/>
+                <Posts />
             </main>
         )
     }

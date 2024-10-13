@@ -14,29 +14,29 @@ import ErrorPage from './components/ErrorPage';
 import PostDetails from './components/user/PostDetails';
 
 function App() {
-  const { initialize } = useStore();
-  const [ isLoading, setIsLoading ] = useState(true);
+  // const { initialize } = useStore();
+  // const [ isLoading, setIsLoading ] = useState(true);
 
-  useEffect(() => {
-    const fetchUsers = fetch('http://localhost:5000/users');
-    const fetchPosts = fetch('http://localhost:5000/posts');
-    const fetchComments = fetch('http://localhost:5000/comments');
+  // useEffect(() => {
+  //   const fetchUsers = fetch('http://localhost:5000/users');
+  //   const fetchPosts = fetch('http://localhost:5000/posts');
+  //   const fetchComments = fetch('http://localhost:5000/comments');
 
-    Promise.all([fetchUsers, fetchPosts, fetchComments])
-      .then(async ([userResponse, postsResponse, commentsResponse]) => {
-        const user = await userResponse.json();
-        const posts = await postsResponse.json();
-        const comments = await commentsResponse.json();
+  //   Promise.all([fetchUsers, fetchPosts, fetchComments])
+  //     .then(async ([userResponse, postsResponse, commentsResponse]) => {
+  //       const user = await userResponse.json();
+  //       const posts = await postsResponse.json();
+  //       const comments = await commentsResponse.json();
 
-        initialize(user, posts, comments);
-        setIsLoading(false);
-      })
-      .catch((error) => console.error('Error fetching data:', error));
-  }, [])
+  //       initialize(user, posts, comments);
+  //       setIsLoading(false);
+  //     })
+  //     .catch((error) => console.error('Error fetching data:', error));
+  // }, [])
 
-  if (isLoading) {
-    return <p>Loading...</p>
-  } else {
+  // if (isLoading) {
+  //   return <p>Loading...</p>
+  // } else {
     return (
     <Router>
       <div className="content">
@@ -56,7 +56,7 @@ function App() {
       </div>
     </Router>
   )
-  }
+  // }
 }
 
 export default App

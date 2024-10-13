@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import data from '../util/data'; //temporary data
 
 // Define the Zustand store
 const useStore = create((set, get) => ({
@@ -12,6 +11,16 @@ const useStore = create((set, get) => ({
         users: users,
         posts: posts,
         comments: comments,
+    })),
+
+    // Set posts 
+    setPosts: (posts) => set(() => ({
+        posts: posts
+    })),
+
+    // Set comments 
+    setComments: (comments) => set(() => ({
+        comments: comments
     })),
 
     // Get user
@@ -37,10 +46,10 @@ const useStore = create((set, get) => ({
         return comments.filter((comment) => comment.post_id == postId).length;
     },
 
-    getMostPopularComment: (postId) => {
+    getMostPopularComment: () => {
         const { comments } = get();
         return comments
-                .filter((comment) => comment.post_id == postId && comment.parent_id == null)
+                .filter((comment) => comment.parent_id == null)
                 .sort((a, b) => a.likes > b.likes ? 1 : a.likes < b.likes ? -1 : 0)[0];
     },
 

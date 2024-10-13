@@ -33,7 +33,16 @@ app.get('/posts', async (req, res) => {
     const posts = await prisma.posts.findMany({
       include: {
         users: true, // Include user data for each post
-        comments: true, // Include comments for each post
+        comments: {
+          include: {
+            users: true, // Include user data for each comment
+            comments: {
+              include: {
+                users: true // Include user data for parent comment
+              }
+            }
+          }
+        }
       },
     });
     res.json(posts);
@@ -65,6 +74,24 @@ app.get('/users/:id', async (req, res) => {
     const user = await prisma.users.findUnique({
       where: {
         id: parseInt(id)
+      },
+      include: {
+        posts: {
+          include: {
+            users: true, // Include user data for each post
+            comments: {
+              include: {
+                users: true, // Include user data for each comment
+                comments: {
+                  include: {
+                    users: true // Include user data for parent comment
+                  }
+                }
+              }
+            }
+          }
+        },
+        comments: true
       }
     });
     res.json(user);
@@ -80,6 +107,19 @@ app.get('/posts/:id', async (req, res) => {
     const post = await prisma.posts.findUnique({
       where: {
         id: parseInt(id)
+      },
+      include: {
+        users: true,
+        comments: {
+          include: {
+            users: true, // Include user data for each comment
+            comments: {
+              include: {
+                users: true // Include user data for parent comment
+              }
+            }
+          }
+        }
       }
     });
     res.json(post);
