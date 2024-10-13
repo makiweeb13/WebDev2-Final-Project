@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const bcrypt = require('bcryptjs');
 const app = express();
 const PORT = 5000;
 
@@ -101,6 +102,7 @@ app.get('/users/:id', async (req, res) => {
   }
 })
 
+// Fetching a single post
 app.get('/posts/:id', async (req, res) => {
   try {
     const id  = req.params.id;
@@ -126,6 +128,65 @@ app.get('/posts/:id', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch post' });
+  }
+})
+
+// Registers a new user
+app.post('/signup', async (req, res) => {
+  
+  const { username, email, password, bio, profile_picture } = req.body;
+  try {
+    const existingUser = await prisma.users.findFirst({
+      where: { 
+        email: email
+      }
+    })
+    if (existingUser) {
+      return res.status(400).json({ message: 'User with this email already exists' });
+    }
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const newUser = await prisma.users.create({
+      data: {
+        username,
+        email,
+        password: hashedPassword,
+        bio: bio || null,
+        profile_picture: profile_picture || null
+      }
+    })
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error('Error creating user:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+})
+
+// Logs in a user
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const findUser = await prisma.users.findFirst({
+      where: {
+        email: email
+      }
+    })
+
+    if (!findUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const passwordMatched = await bcrypt.compare(password, findUser.password);
+
+    if (!passwordMatched) {
+      return res.status(400).json({ message: 'Password mismatch' });
+    }
+
+    res.status(200).json({ message: 'Login successful' });
+  } catch (error) {
+    console.error('Error logging in:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 })
 
