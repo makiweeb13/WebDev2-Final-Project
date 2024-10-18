@@ -1,13 +1,18 @@
-import { useAuth } from "../../util/ProtectedRoutes";
+import useAuth from "../../util/useAuth";
 import UserHeader from "./UserHeader";
 import Header from "../Header";
 
 function HeaderMode() {
-    if (useAuth()) {
-        return <UserHeader />
-    } else {
-        return <Header />
+    const { isAuthenticated, loading } = useAuth();
+
+    if (!loading) {
+        if (isAuthenticated) {
+            return <UserHeader />
+        } else {
+            return <Header />
+        }
     }
+    
 }
 
 export default HeaderMode;

@@ -1,27 +1,29 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from 'formik';
 import { userSchema } from '../schemas/signup-schema';
 
-const onSubmit = (values, { setSubmitting, resetForm }) => {
-    fetch('http://localhost:5000/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(values)
-    })
-    .then(res => res.json())
-    .then(data => {
-        console.log(data.message)
-        resetForm()
-        setSubmitting(false)
-    })
-    .catch(err => {
-        console.log(err);
-    })
-}
-
 function Signup() {
+    const navigate = useNavigate();
+
+    const onSubmit = (values, { setSubmitting, resetForm }) => {
+        fetch('http://localhost:5000/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(values)
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data.message)
+            resetForm()
+            setSubmitting(false)
+            navigate('/login')
+        })
+        .catch(err => {
+            console.error(err);
+        })
+    }
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({
         initialValues: {

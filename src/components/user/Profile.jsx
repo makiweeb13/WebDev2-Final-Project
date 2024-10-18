@@ -10,15 +10,15 @@ import useStore from '../../store/store';
 function Profile() {
     
     const { id } = useParams();
-    const { setPosts } = useStore();
-    const [ user, setUser ] = useState(null);
+    const { user, setPosts } = useStore();
+    const [ loggedInUser, setLoggedInUser ] = useState(null);
     const [ isLoading, setIsLoading ] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/users/${id}`)
+        fetch(`http://localhost:5000/users/${user.id}`)
             .then(response => response.json())
             .then(json => {
-                setUser(json);
+                setLoggedInUser(json);
                 setPosts(json.posts)
                 setIsLoading(false);
             })
@@ -34,9 +34,9 @@ function Profile() {
                     <img src={profile} alt="profile picture" />
                     <FontAwesomeIcon icon={faPen} className="menu-icon edit"/>
                     <div className="profile-details">
-                        <h1 className="username">{user.username}</h1>
-                        <h4 className="email">{user.email}</h4>
-                        <p className="bio">{user.bio}</p>
+                        <h1 className="username">{loggedInUser.username}</h1>
+                        <h4 className="email">{loggedInUser.email}</h4>
+                        <p className="bio">{loggedInUser.bio}</p>
                     </div>
                 </div>
                 <h2>Posts</h2>

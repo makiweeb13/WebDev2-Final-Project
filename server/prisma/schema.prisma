@@ -35,7 +35,7 @@ model posts {
   genre    String?    @db.LongText
   status   Boolean?   @default(true)
   rate     Int        @db.TinyInt
-  medium   String?     @db.VarChar(50)
+  medium   String     @db.VarChar(50)
   synopsis String?    @db.Text
   review   String?    @db.Text
   image    String?    @db.VarChar(255)
@@ -50,7 +50,7 @@ model posts {
 model users {
   id              Int        @id @default(autoincrement())
   username        String     @db.VarChar(50)
-  email           String     @db.VarChar(100)
+  email           String     @unique(map: "email") @db.VarChar(100)
   password        String     @db.VarChar(255)
   bio             String?    @db.Text
   profile_picture String?    @db.VarChar(255)

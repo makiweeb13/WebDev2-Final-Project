@@ -2,9 +2,16 @@ import { create } from 'zustand';
 
 // Define the Zustand store
 const useStore = create((set, get) => ({
+    user: null,
     users: [],
     posts: [],
     comments: [],
+
+    // Function to set the logged-in user
+    setUser: (userData) => set({ user: userData }),
+
+    // Function to log out the user
+    clearUser: () => set({ user: null }), 
 
     // Method to set the fetched data into Zustand store
     initialize: (users, posts, comments) => set(() => ({
@@ -29,12 +36,6 @@ const useStore = create((set, get) => ({
         return users.filter((user) => user.id == userId);
     },
 
-    // Getting username
-    getUsername: (userId) => {
-        const { users } = get();
-        return users.filter((user) => user.id == userId)[0].username;
-    },
-
     // Getting parent comment
     getComment: (parentId) => {
         const { comments } = get();
@@ -46,13 +47,6 @@ const useStore = create((set, get) => ({
         return comments.filter((comment) => comment.post_id == postId).length;
     },
 
-    getMostPopularComment: () => {
-        const { comments } = get();
-        return comments
-                .filter((comment) => comment.parent_id == null)
-                .sort((a, b) => a.likes > b.likes ? 1 : a.likes < b.likes ? -1 : 0)[0];
-    },
-
     //Getting the date
     getDate: (date) => {
         return new Date(date).toLocaleDateString();
@@ -60,6 +54,7 @@ const useStore = create((set, get) => ({
 
     // Actions for Users
     addUser: (user) => set((state) => ({ users: [...state.users, user] })),
+
     updateUser: (updatedUser) =>
         set((state) => ({
         users: state.users.map((user) =>

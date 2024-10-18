@@ -2,15 +2,28 @@ const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const app = express();
-const PORT = 5000;
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
+const dotenv = require('dotenv');
+dotenv.config();
 
 // Prisma Client library
 const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
+// Configure CORS to allow frontend origin and allow credentials
+const corsOptions = {
+  origin: 'http://localhost:5173', // frontend URL
+  credentials: true // Allow credentials (cookies, authorization headers)
+};
+
 // Middleware
-app.use(cors());
-app.use(express.json()); 
+app.use(cors(corsOptions));
+app.use(express.json());
+app.use(cookieParser()); 
+
+const SECRET_KEY = process.env.JWT_SECRET;
+const PORT = process.env.PORT;
 
 // Fetch all users with their related posts and comments
 app.get('/users', async (req, res) => {
@@ -21,7 +34,7 @@ app.get('/users', async (req, res) => {
         comments: true, // Fetch related comments for each user
       },
     });
-    res.json(users);
+    res.status(200).json(users);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch users' });
@@ -46,7 +59,7 @@ app.get('/posts', async (req, res) => {
         }
       },
     });
-    res.json(posts);
+    res.status(200).json(posts);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch posts' });
@@ -62,7 +75,7 @@ app.get('/comments', async (req, res) => {
         users: true, // Include related user for each comment
       },
     });
-    res.json(comments);
+    res.status(200).json(comments);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch comments' });
@@ -95,7 +108,7 @@ app.get('/users/:id', async (req, res) => {
         comments: true
       }
     });
-    res.json(user);
+    res.status(200).json(user);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch user' });
@@ -124,7 +137,7 @@ app.get('/posts/:id', async (req, res) => {
         }
       }
     });
-    res.json(post);
+    res.status(200).json(post);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to fetch post' });
@@ -156,7 +169,7 @@ app.post('/signup', async (req, res) => {
         profile_picture: profile_picture || null
       }
     })
-    res.status(201).json({ message: 'User registered successfully' });
+    res.status(200).json({ message: 'User registered successfully' });
   } catch (error) {
     console.error('Error creating user:', error);
     res.status(500).json({ message: 'Internal server error' });
@@ -183,11 +196,30 @@ app.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Password mismatch' });
     }
 
-    res.status(200).json({ message: 'Login successful' });
+    const token = jwt.sign({ id: findUser.id, email: findUser.email }, SECRET_KEY, { expiresIn: '1h' })
+
+    res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 3600000, sameSite: 'Strict' }); // Cookie lasts 1 hour
+
+    res.status(200).json({ message: 'Login successful', user: { id: findUser.id, email: findUser.email } });
   } catch (error) {
     console.error('Error logging in:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
+})
+
+app.get('/check-auth', (req, res) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.json({ isAuthenticated: false });
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.json({ isAuthenticated: false });
+    }
+    return res.json({ isAuthenticated: true, user: user });
+  })
 })
 
 // Start the server
