@@ -134,6 +134,16 @@ app.get('/posts/:id', async (req, res) => {
               }
             }
           }
+        },
+        postgenres: {
+          include: {
+            genres: true
+          }
+        },
+        postmediums: {
+          include: {
+            mediums: true
+          }
         }
       }
     });

@@ -37,10 +37,10 @@ function Post({ post, detailedMode }) {
                 </div>
                 <div className="post-content">
                     <p className="title">{post.title}</p>
-                    <p className="genres">{post.genre}</p>
+                    <p className="genres"></p>
                     <p className="status">{post.status}</p>
                     <p className="rate">{post.rate}/10</p>
-                    <p className="medium">{post.medium}</p>
+                    <p className="medium"></p>
                     <p className="synopsis">{post.synopsis}</p>
                     <p className="review">{post.review}</p>
                 </div>

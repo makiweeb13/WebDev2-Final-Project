@@ -230,6 +230,16 @@ input:-webkit-autofill {
     display: flex;
 }
 
+.center-add-post {
+    display: grid;
+    place-items: center;
+}
+
+.center-add-post h2 {
+    font-size: 1.5em;
+    border-bottom: 1px solid var(--orange-color);
+}
+
 .add-post #title {
     padding: 5px;
     border-radius: 10px;
@@ -248,6 +258,14 @@ input:-webkit-autofill {
     margin: 15px 10px;
 }
 
+.add-post #status {
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #444;
+    color: #fff;
+    margin: 15px 10px;
+}
+
 .add-post #synopsis,
 .add-post #review {
     padding: 10px;
@@ -257,6 +275,10 @@ input:-webkit-autofill {
     background-color: #444;
     color: #fff;
     margin: 10px 0;
+}
+
+.add-post button {
+    float: right;
 }
  
 input,

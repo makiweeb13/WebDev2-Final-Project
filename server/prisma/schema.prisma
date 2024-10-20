@@ -28,21 +28,21 @@ model comments {
 }
 
 model posts {
-  id       Int        @id @default(autoincrement())
-  user_id  Int
-  date     DateTime   @db.DateTime(0)
-  title    String     @db.VarChar(255)
-  genre    String?    @db.LongText
-  status   Boolean?   @default(true)
-  rate     Int        @db.TinyInt
-  medium   String     @db.VarChar(50)
-  synopsis String?    @db.Text
-  review   String?    @db.Text
-  image    String?    @db.VarChar(255)
-  likes    Int?       @default(0)
-  dislikes Int?       @default(0)
-  comments comments[]
-  users    users      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "posts_ibfk_1")
+  id          Int           @id @default(autoincrement())
+  user_id     Int
+  date        DateTime      @db.DateTime(0)
+  title       String        @db.VarChar(255)
+  status      Boolean?      @default(true)
+  rate        Int           @db.TinyInt
+  synopsis    String?       @db.Text
+  review      String?       @db.Text
+  image       String?       @db.VarChar(255)
+  likes       Int?          @default(0)
+  dislikes    Int?          @default(0)
+  comments    comments[]
+  postgenres  postgenres[]
+  postmediums postmediums[]
+  users       users         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "posts_ibfk_1")
 
   @@index([user_id], map: "user_id")
 }
@@ -57,4 +57,36 @@ model users {
   created_at      DateTime   @default(now()) @db.Timestamp(0)
   comments        comments[]
   posts           posts[]
+}
+
+model genres {
+  id         Int          @id @default(autoincrement())
+  name       String       @db.VarChar(100)
+  postgenres postgenres[]
+}
+
+model mediums {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(100)
+  postmediums postmediums[]
+}
+
+model postgenres {
+  post_id  Int
+  genre_id Int
+  posts    posts  @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "postgenres_ibfk_1")
+  genres   genres @relation(fields: [genre_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "postgenres_ibfk_2")
+
+  @@id([post_id, genre_id])
+  @@index([genre_id], map: "genre_id")
+}
+
+model postmediums {
+  post_id   Int
+  medium_id Int
+  posts     posts   @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "postmediums_ibfk_1")
+  mediums   mediums @relation(fields: [medium_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "postmediums_ibfk_2")
+
+  @@id([post_id, medium_id])
+  @@index([medium_id], map: "medium_id")
 }
