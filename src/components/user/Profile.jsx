@@ -10,12 +10,12 @@ import useStore from '../../store/store';
 function Profile() {
     
     const { id } = useParams();
-    const { user, setPosts } = useStore();
+    const { setPosts } = useStore();
     const [ loggedInUser, setLoggedInUser ] = useState(null);
     const [ isLoading, setIsLoading ] = useState(true);
 
     useEffect(() => {
-        fetch(`http://localhost:5000/users/${user.id}`)
+        fetch(`http://localhost:5000/users/${id}`)
             .then(response => response.json())
             .then(json => {
                 setLoggedInUser(json);

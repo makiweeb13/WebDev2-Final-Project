@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass, faHouse, faBell, faPlus } from "@fortawesome/free-solid-svg-icons";
 import profile from '../../assets/profile-icon.png';
+import Cookies from 'js-cookie'
 
 function UserHeader() {
-
-    const userId = 1; // temporary current user id
+    const userId = Cookies.get('userId');
 
     return (
         <header>

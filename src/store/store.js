@@ -2,16 +2,9 @@ import { create } from 'zustand';
 
 // Define the Zustand store
 const useStore = create((set, get) => ({
-    user: null,
     users: [],
     posts: [],
     comments: [],
-
-    // Function to set the logged-in user
-    setUser: (userData) => set({ user: userData }),
-
-    // Function to log out the user
-    clearUser: () => set({ user: null }), 
 
     // Method to set the fetched data into Zustand store
     initialize: (users, posts, comments) => set(() => ({

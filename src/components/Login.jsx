@@ -4,10 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useFormik } from 'formik';
 import { userSchema } from '../schemas/login-schema';
-import useStore from "../store/store";
+import Cookies from 'js-cookie';
 
 function Login() {
-    const { setUser } = useStore();
     const navigate = useNavigate();
 
     const onSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -21,7 +20,8 @@ function Login() {
             const data = await response.json();
             if (response.ok) {
                 console.log(data.message);
-                setUser(data.user);
+                Cookies.set('userId', data.user.id, { expires: 1 / 24 })
+                Cookies.set('userEmail', data.user.email, { expires: 1 / 24 })
                 resetForm();
                 setSubmitting(false) 
                 navigate('/');
