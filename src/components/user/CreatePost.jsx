@@ -8,8 +8,26 @@ import { createPostSchema } from '../../schemas/createpost-schema';
 function CreatePost() {
     const navigate = useNavigate();
 
-    const onSubmit = (values, { setSubmitting, resetForm}) => {
-        console.log(values)
+    const onSubmit = async (values, { setSubmitting, resetForm}) => {
+        try {
+            const response = await fetch('http://localhost:5000/create-post', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(values)
+            })
+            const data = await response.json();
+            if (response.ok) {
+                console.log(data.message);
+                resetForm();
+                setSubmitting(false) 
+                navigate('/');
+            } else {
+                console.error('Creating post failed', data.message);
+            }
+        } catch(err) {
+            console.error('Creating post request failed:', err)
+        }
     }
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } = useFormik({

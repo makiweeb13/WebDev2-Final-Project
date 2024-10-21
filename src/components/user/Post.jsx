@@ -8,23 +8,9 @@ import { Link } from 'react-router-dom';
 
 function Post({ post, detailedMode }) {
 
-    const { getDate } = useStore();
-    const getMostPopularComment = (post) => {
-        if (post.comments) {
-            return post.comments
-                .filter(post => post.parent_id == null)
-                .sort((a, b) => a.likes > b.likes ? 1 : a.likes < b.likes ? -1 : 0)[0];
-        }
-        return null;
-    }
+    const { getDate, getGenres, getMediums, getMostPopularComment } = useStore();
     const popularComment = getMostPopularComment(post)
-    // const displayImages = () => {
-    //     let imgID = 1;
-    //     if (props.post.images != []) {
-    //         return props.post.images.map(img => <img key={imgID++} src={img} width="200"></img>)
-    //     }
-    // }
-    
+
     return (
         <>
             <div className="post">
@@ -37,10 +23,10 @@ function Post({ post, detailedMode }) {
                 </div>
                 <div className="post-content">
                     <p className="title">{post.title}</p>
-                    <p className="genres"></p>
+                    <p className="genres">{getGenres(post)}</p>
                     <p className="status">{post.status}</p>
                     <p className="rate">{post.rate}/10</p>
-                    <p className="medium"></p>
+                    <p className="medium">{getMediums(post)}</p>
                     <p className="synopsis">{post.synopsis}</p>
                     <p className="review">{post.review}</p>
                 </div>
@@ -60,12 +46,9 @@ function Post({ post, detailedMode }) {
                         </Link>
                     </div>
                 </div>
-                {/* <div className="images">{displayImages()}</div>*/}
             </div>
-            { detailedMode ? 
-                <Comments comments={post.comments} /> : 
-                <Comment key={popularComment.id} comment={popularComment} commentId={popularComment.id}/>
-            }
+            { detailedMode && <Comments comments={post.comments} /> }
+            { !detailedMode && popularComment && <Comment key={popularComment.id} comment={popularComment} commentId={popularComment.id}/> }
         </>
     )
 }

@@ -99,6 +99,26 @@ const useStore = create((set, get) => ({
             : comment
         ),
     })),
+
+    // list genres
+    getGenres: (post) => {
+        return post.postgenres.map(postgenre => postgenre.genres.name).join(', ');
+    },
+
+    // list mediums
+    getMediums: (post) => {
+        return post.postmediums.map(postmedium => postmedium.mediums.name).join(', ');
+    },
+
+    // get most popular comment
+    getMostPopularComment: (post) => {
+        if (post.comments) {
+            return post.comments
+                .filter(comment => comment.parent_id == null)
+                .sort((a, b) => a.likes > b.likes ? 1 : a.likes < b.likes ? -1 : 0)[0];
+        }
+        return null;
+    }
 }));
 
 export default useStore;

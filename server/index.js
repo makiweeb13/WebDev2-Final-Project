@@ -25,6 +25,20 @@ app.use(cookieParser());
 const SECRET_KEY = process.env.JWT_SECRET;
 const PORT = process.env.PORT;
 
+// Middleware to check if a user is authenticated by verifying the JWT token
+const authenticateToken = (req, res, next) => {
+  const token = req.cookies.token; // Assuming token is stored in cookies
+  if (!token) return res.status(401).json({ message: "Access denied" });
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: "Token is invalid" });
+
+    // Attach the user data (decoded token) to the request object
+    req.user = user;
+    next();
+  });
+};
+
 // Fetch all users with their related posts and comments
 app.get('/users', async (req, res) => {
   try {
@@ -55,6 +69,16 @@ app.get('/posts', async (req, res) => {
                 users: true // Include user data for parent comment
               }
             }
+          }
+        },
+        postgenres: {
+          include: {
+            genres: true
+          }
+        },
+        postmediums: {
+          include: {
+            mediums: true
           }
         }
       },
@@ -230,6 +254,48 @@ app.get('/check-auth', (req, res) => {
     }
     return res.json({ isAuthenticated: true, user: user });
   })
+})
+
+app.post('/create-post', authenticateToken, async (req, res) =>{
+  const { title, rate, status, genres, mediums, synopsis, review } = req.body;
+  const user_id = req.user.id
+
+  try {
+    const post = await prisma.posts.create({
+      data: {
+        title,
+        user_id,
+        date: new Date(),
+        rate: parseInt(rate),
+        status: JSON.parse(status),
+        synopsis: synopsis || null,
+        review
+      }
+    })
+
+    const postGenres = genres.map(genreId => ({
+      post_id: post.id,
+      genre_id: genreId
+    }))
+    await prisma.postgenres.createMany({
+      data: postGenres,
+      skipDuplicates: true
+    })
+
+    const postMediums = mediums.map(mediumId => ({
+      post_id: post.id,
+      medium_id: mediumId
+    }))
+    await prisma.postmediums.createMany({
+      data: postMediums,
+      skipDuplicates: true
+    })
+    
+    res.status(200).json({ message: 'Post created successfully'});
+  } catch (error) {
+    console.error('Error creating post: ', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 })
 
 // Start the server
