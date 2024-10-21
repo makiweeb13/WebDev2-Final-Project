@@ -332,6 +332,10 @@ input[type="number"] {
 .error-message {
     color: rgb(154, 59, 59);
     font-size: 15px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
 }
 
 footer {
