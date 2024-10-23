@@ -77,6 +77,7 @@ const useStore = create((set, get) => ({
     // Actions for Comments
     addComment: (comment) =>
         set((state) => ({ comments: [...state.comments, comment] })),
+
     updateComment: (updatedComment) =>
         set((state) => ({
         comments: state.comments.map((comment) =>

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 function Post({ post, detailedMode }) {
 
-    const { getDate, getGenres, getMediums, getMostPopularComment } = useStore();
+    const { comments, getDate, getGenres, getMediums, getMostPopularComment } = useStore();
     const popularComment = getMostPopularComment(post)
 
     return (
@@ -47,7 +47,7 @@ function Post({ post, detailedMode }) {
                     </div>
                 </div>
             </div>
-            { detailedMode && <Comments comments={post.comments} /> }
+            { detailedMode && <Comments comments={comments} /> }
             { !detailedMode && popularComment && <Comment key={popularComment.id} comment={popularComment} commentId={popularComment.id}/> }
         </>
     )

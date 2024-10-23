@@ -1,9 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { useState } from 'react';
+import useStore from '../../store/store';
 
 function AddComment({ postId, parentId }) {
     const [ value, setValue ] = useState('')
+    const { addComment } = useStore();
     const label = parentId ? 'reply' : 'comment';
 
      const onSubmit = async (value) => {
@@ -22,6 +24,8 @@ function AddComment({ postId, parentId }) {
             if (response.ok) {
                 console.log(data.message);
                 setValue('')
+                addComment(data.comment);
+                
             } else {
                 console.error('Adding comment failed', data.message);
             }

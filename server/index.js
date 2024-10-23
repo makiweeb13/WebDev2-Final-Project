@@ -303,7 +303,7 @@ app.post('/add-comment', authenticateToken, async (req, res) => {
   const user_id = req.user.id
 
   try {
-    await prisma.comments.create({
+    const newComment = await prisma.comments.create({
       data: {
         post_id: parseInt(post_id),
         user_id: parseInt(user_id),
@@ -311,7 +311,20 @@ app.post('/add-comment', authenticateToken, async (req, res) => {
         content
       }
     })
-    res.status(200).json({ message: 'Comment added successfully'});
+    const findComment = await prisma.comments.findFirst({
+      where: {
+        id: newComment.id
+      },
+      include: {
+        users: true, // Include user data for each comment
+        comments: {
+          include: {
+            users: true // Include user data for parent comment
+          }
+        }
+      }
+    })
+    res.status(200).json({ message: 'Comment added successfully', comment: findComment });
   } catch (error) {
     console.error('Error adding comment: ', error);
     res.status(500).json({ message: 'Internal server error' });
