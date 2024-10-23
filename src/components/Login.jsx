@@ -56,7 +56,6 @@ function Login() {
                     onBlur={handleBlur}
                 />
                 <br />
-                { errors.email && touched.email && <p className='error-message'>{errors.email}</p> }
                 <input 
                     type="password" 
                     name="password" 
@@ -67,6 +66,7 @@ function Login() {
                     onBlur={handleBlur}
                 />
                 <br />
+                { errors.email && touched.email && <p className='error-message'>{errors.email}</p> }
                 { errors.password && touched.password && <p className='error-message'>{errors.password}</p> }
                 <button type="submit">Login</button>
                 <p>Don't have an account yet? <Link to="/signup" className="link">Create Account</Link></p>

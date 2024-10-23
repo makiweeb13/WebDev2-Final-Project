@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import Post from "./Post";
+import AddComment from "./AddComment";
 
 function PostDetails() {
     const { id } = useParams();
@@ -29,6 +30,7 @@ function PostDetails() {
                 <div className="posts">
                     <Post key={id} post={post} detailedMode={true}/>
                 </div>
+                <AddComment postId={id}/>
             </main>
         )
     }

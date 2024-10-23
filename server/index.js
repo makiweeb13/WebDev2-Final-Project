@@ -194,7 +194,7 @@ app.post('/signup', async (req, res) => {
     
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await prisma.users.create({
+    await prisma.users.create({
       data: {
         username,
         email,
@@ -256,7 +256,7 @@ app.get('/check-auth', (req, res) => {
   })
 })
 
-app.post('/create-post', authenticateToken, async (req, res) =>{
+app.post('/create-post', authenticateToken, async (req, res) => {
   const { title, rate, status, genres, mediums, synopsis, review } = req.body;
   const user_id = req.user.id
 
@@ -294,6 +294,26 @@ app.post('/create-post', authenticateToken, async (req, res) =>{
     res.status(200).json({ message: 'Post created successfully'});
   } catch (error) {
     console.error('Error creating post: ', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+})
+
+app.post('/add-comment', authenticateToken, async (req, res) => {
+  const { post_id, parent_id, content } = req.body;
+  const user_id = req.user.id
+
+  try {
+    await prisma.comments.create({
+      data: {
+        post_id: parseInt(post_id),
+        user_id: parseInt(user_id),
+        parent_id: null || parent_id,
+        content
+      }
+    })
+    res.status(200).json({ message: 'Comment added successfully'});
+  } catch (error) {
+    console.error('Error adding comment: ', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 })

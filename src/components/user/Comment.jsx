@@ -1,13 +1,14 @@
-import React from 'react';
-import Comments from './Comments';
+import React, { useState } from 'react';
 import useStore from '../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp, faThumbsDown, faReply } from "@fortawesome/free-solid-svg-icons";
 import profile from '../../assets/profile-icon.png';
+import AddComment from './AddComment';
 
 function Comment({ comment }) {
 
     const { getDate } = useStore();
+    const [ toggleReply, setToggleReply ] = useState(false);
     
     return (
         <>
@@ -31,10 +32,11 @@ function Comment({ comment }) {
                         <FontAwesomeIcon icon={faThumbsDown} className="menu-icon"/>
                     </div>
                     <div>
-                        <FontAwesomeIcon icon={faReply} className="menu-icon"/>
+                        <FontAwesomeIcon icon={faReply} className="menu-icon" onClick={() => setToggleReply(!toggleReply)}/>
                     </div>
                 </div>
             </div>
+            { toggleReply && <AddComment postId={comment.post_id} parentId={comment.id}/> }
         </>
         
     )
