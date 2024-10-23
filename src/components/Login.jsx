@@ -31,7 +31,6 @@ function Login() {
         } catch(err) {
             console.error('Login request failed:', err)
         }
-        
     }
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit } = useFormik({

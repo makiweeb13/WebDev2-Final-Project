@@ -28,7 +28,7 @@ const PORT = process.env.PORT;
 // Middleware to check if a user is authenticated by verifying the JWT token
 const authenticateToken = (req, res, next) => {
   const token = req.cookies.token; // Assuming token is stored in cookies
-  if (!token) return res.status(401).json({ message: "Access denied" });
+  if (!token) return res.status(401).json({ message: "Unauthorized" });
 
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     if (err) return res.status(403).json({ message: "Token is invalid" });
@@ -327,6 +327,61 @@ app.post('/add-comment', authenticateToken, async (req, res) => {
     res.status(200).json({ message: 'Comment added successfully', comment: findComment });
   } catch (error) {
     console.error('Error adding comment: ', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+})
+
+app.put('/posts/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { title, rate, status, genres, mediums, synopsis, review, likes, dislikes } = req.body;
+
+  const dataToUpdate = Object.fromEntries(
+    Object.entries({ title, rate, status, genres, mediums, synopsis, review, likes, dislikes })
+          .filter(([_, value]) => value !== undefined)
+  );
+
+  if (Object.keys(dataToUpdate).length === 0) {
+    return res.status(400).json({ message: 'No fields provided to update' });
+  }
+
+  try {
+    const post = await prisma.posts.update({
+      where: {
+        id: id
+      },
+      data: dataToUpdate
+    })
+    const updatedPost = await prisma.posts.findFirst({
+      where: {
+        id: post.id
+      },
+      include: {
+        users: true,
+        comments: {
+          include: {
+            users: true, // Include user data for each comment
+            comments: {
+              include: {
+                users: true // Include user data for parent comment
+              }
+            }
+          }
+        },
+        postgenres: {
+          include: {
+            genres: true
+          }
+        },
+        postmediums: {
+          include: {
+            mediums: true
+          }
+        }
+      }
+    })
+    res.status(200).json({ message: 'Post updated successfully', post: updatedPost })
+  } catch (error) {
+    console.error('Error updating: ', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 })

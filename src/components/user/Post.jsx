@@ -8,8 +8,29 @@ import { Link } from 'react-router-dom';
 
 function Post({ post, detailedMode }) {
 
-    const { comments, getDate, getGenres, getMediums, getMostPopularComment } = useStore();
+    const { comments, getDate, getGenres, getMediums, getMostPopularComment, updatePost } = useStore();
     const popularComment = getMostPopularComment(post)
+
+    const handleLikes = async (value) => {
+        try {
+            const response = await fetch(`http://localhost:5000/posts/${post.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(value)
+            })
+            const data = await response.json();
+            if (response.ok) {
+                updatePost(data.post)
+                console.log(data.message);
+
+            } else {
+                console.error(`Post update failed:`, data.message);
+            }
+        } catch(err) {
+            console.error(`Post update request failed`, err)
+        }
+    }
 
     return (
         <>
@@ -33,11 +54,11 @@ function Post({ post, detailedMode }) {
                 <div className="options">
                     <div className="likes">
                         <p>{post.likes}&nbsp;</p>
-                        <FontAwesomeIcon icon={faThumbsUp} className="menu-icon"/>
+                        <FontAwesomeIcon icon={faThumbsUp} className="menu-icon" onClick={() => handleLikes({ likes: ++post.likes })}/>
                     </div>
                     <div className="dislikes">
                         <p>{post.dislikes}&nbsp;</p>
-                        <FontAwesomeIcon icon={faThumbsDown} className="menu-icon"/>
+                        <FontAwesomeIcon icon={faThumbsDown} className="menu-icon" onClick={() => handleLikes({ dislikes: ++post.dislikes })} />
                     </div>
                     <div>
                         <p>{post.comments.length}&nbsp;</p>
