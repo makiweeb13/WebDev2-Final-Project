@@ -6,11 +6,13 @@ import profile from '../../assets/profile-icon.png';
 import AddComment from './AddComment';
 import Cookies from 'js-cookie'; 
 import { Link } from 'react-router-dom';
+import UpdateComment from './UpdateComment';
 
-function Comment({ comment }) {
+function Comment({ comment, preview }) {
 
     const { getDate } = useStore();
     const [ toggleReply, setToggleReply ] = useState(false);
+    const [ toggleEdit, setToggleEdit ] = useState(false);
     const userId = Cookies.get('userId');
     
     return (
@@ -38,11 +40,11 @@ function Comment({ comment }) {
                         <FontAwesomeIcon icon={faReply} className="menu-icon" onClick={() => setToggleReply(!toggleReply)}/>
                     </div>
                     {
-                        comment.user_id == userId &&
+                        comment.user_id == userId && !preview &&
                         <>
                         <div>
                             <Link>
-                            <FontAwesomeIcon icon={faPenToSquare} className="menu-icon" />
+                            <FontAwesomeIcon icon={faPenToSquare} className="menu-icon" onClick={() => setToggleEdit(!toggleEdit)}/>
                             </Link>
                         </div>
                         <div>
@@ -54,7 +56,8 @@ function Comment({ comment }) {
                     }
                 </div>
             </div>
-            { toggleReply && <AddComment postId={comment.post_id} parentId={comment.id}/> }
+            { toggleReply && <AddComment postId={comment.post_id} parentId={comment.id} /> }
+            { toggleEdit && <UpdateComment commentId={comment.id} content={comment.content} /> }
         </>
         
     )

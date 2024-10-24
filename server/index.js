@@ -411,7 +411,7 @@ app.put('/posts/:id', async (req, res) => {
         }
       }
     })
-    
+
     res.status(200).json({ message: 'Post updated successfully', post: updatedPost })
   } catch (error) {
     console.error('Error updating post: ', error);
@@ -452,9 +452,9 @@ app.put('/comments/:id', async (req, res) => {
         }
       }
     })
-    res.status(200).json({ message: 'Post updated successfully', comment: updatedComment })
+    res.status(200).json({ message: 'Comment updated successfully', comment: updatedComment })
   } catch (error) {
-    console.error('Error updating post: ', error);
+    console.error('Error updating comment: ', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 })

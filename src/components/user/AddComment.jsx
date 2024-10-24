@@ -45,7 +45,7 @@ function AddComment({ postId, parentId }) {
                 onChange={(e) => setValue(e.target.value)}
             >
             </textarea>
-            <button onClick={() => onSubmit(value)}><FontAwesomeIcon icon={faPaperPlane} /></button>
+            <button disabled={value.length > 0 ? false : true} onClick={() => onSubmit(value)}><FontAwesomeIcon icon={faPaperPlane} /></button>
         </div>
     )
 }

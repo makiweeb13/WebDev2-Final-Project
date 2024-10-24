@@ -93,7 +93,7 @@ function Post({ post, detailedMode }) {
                 </div>
             </div>
             { detailedMode && <Comments comments={comments} /> }
-            { !detailedMode && popularComment && <Comment key={popularComment.id} comment={popularComment} commentId={popularComment.id}/> }
+            { !detailedMode && popularComment && <Comment key={popularComment.id} comment={popularComment} preview={true}/> }
         </>
     )
 }
