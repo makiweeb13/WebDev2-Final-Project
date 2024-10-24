@@ -381,7 +381,47 @@ app.put('/posts/:id', async (req, res) => {
     })
     res.status(200).json({ message: 'Post updated successfully', post: updatedPost })
   } catch (error) {
-    console.error('Error updating: ', error);
+    console.error('Error updating post: ', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+})
+
+app.put('/comments/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { content, likes, dislikes } = req.body;
+
+  const dataToUpdate = Object.fromEntries(
+    Object.entries({ content, likes, dislikes })
+          .filter(([_, value]) => value !== undefined)
+  );
+
+  if (Object.keys(dataToUpdate).length === 0) {
+    return res.status(400).json({ message: 'No fields provided to update' });
+  }
+
+  try {
+    const comment = await prisma.comments.update({
+      where: {
+        id: id
+      },
+      data: dataToUpdate
+    })
+    const updatedComment = await prisma.comments.findFirst({
+      where: {
+        id: comment.id
+      },
+      include: {
+        users: true, // Include user data for each comment
+        comments: {
+          include: {
+            users: true // Include user data for parent comment
+          }
+        }
+      }
+    })
+    res.status(200).json({ message: 'Post updated successfully', comment: updatedComment })
+  } catch (error) {
+    console.error('Error updating post: ', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 })

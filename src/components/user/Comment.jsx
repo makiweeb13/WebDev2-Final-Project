@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import useStore from '../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faThumbsDown, faReply } from "@fortawesome/free-solid-svg-icons";
+import { faThumbsUp, faThumbsDown, faReply, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import profile from '../../assets/profile-icon.png';
 import AddComment from './AddComment';
+import Cookies from 'js-cookie'; 
+import { Link } from 'react-router-dom';
 
 function Comment({ comment }) {
 
     const { getDate } = useStore();
     const [ toggleReply, setToggleReply ] = useState(false);
+    const userId = Cookies.get('userId');
     
     return (
         <>
@@ -34,6 +37,14 @@ function Comment({ comment }) {
                     <div>
                         <FontAwesomeIcon icon={faReply} className="menu-icon" onClick={() => setToggleReply(!toggleReply)}/>
                     </div>
+                    {
+                        comment.user_id == userId &&
+                        <div>
+                            <Link>
+                            <FontAwesomeIcon icon={faEllipsisVertical} className="menu-icon" />
+                            </Link>
+                        </div>
+                    }
                 </div>
             </div>
             { toggleReply && <AddComment postId={comment.post_id} parentId={comment.id}/> }

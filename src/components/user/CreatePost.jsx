@@ -8,7 +8,7 @@ import { createPostSchema } from '../../schemas/createpost-schema';
 function CreatePost() {
     const navigate = useNavigate();
 
-    const onSubmit = async (values, { setSubmitting, resetForm}) => {
+    const onSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
             const response = await fetch('http://localhost:5000/create-post', {
                 method: 'POST',

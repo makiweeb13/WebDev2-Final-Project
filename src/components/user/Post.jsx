@@ -1,15 +1,17 @@
 import useStore from '../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faThumbsDown, faComment } from "@fortawesome/free-solid-svg-icons";
+import { faThumbsUp, faThumbsDown, faComment, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import profile from '../../assets/profile-icon.png';
 import Comment from './Comment';
 import Comments from './Comments';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 function Post({ post, detailedMode }) {
 
     const { comments, getDate, getGenres, getMediums, getMostPopularComment, updatePost } = useStore();
     const popularComment = getMostPopularComment(post)
+    const userId = Cookies.get('userId');
 
     const handleLikes = async (value) => {
         try {
@@ -54,7 +56,7 @@ function Post({ post, detailedMode }) {
                 <div className="options">
                     <div className="likes">
                         <p>{post.likes}&nbsp;</p>
-                        <FontAwesomeIcon icon={faThumbsUp} className="menu-icon" onClick={() => handleLikes({ likes: ++post.likes })}/>
+                        <FontAwesomeIcon icon={faThumbsUp} className="menu-icon" onClick={() => handleLikes({ likes: ++post.likes })} />
                     </div>
                     <div className="dislikes">
                         <p>{post.dislikes}&nbsp;</p>
@@ -63,9 +65,17 @@ function Post({ post, detailedMode }) {
                     <div>
                         <p>{post.comments.length}&nbsp;</p>
                         <Link to={!detailedMode ? `/post/${post.id}` : ''}>
-                            <FontAwesomeIcon icon={faComment} className="menu-icon"/>
+                            <FontAwesomeIcon icon={faComment} className="menu-icon" />
                         </Link>
                     </div>
+                    {
+                        post.user_id == userId &&
+                        <div>
+                            <Link>
+                            <FontAwesomeIcon icon={faEllipsisVertical} className="menu-icon" />
+                            </Link>
+                        </div>
+                    }
                 </div>
             </div>
             { detailedMode && <Comments comments={comments} /> }
