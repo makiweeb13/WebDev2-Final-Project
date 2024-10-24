@@ -10,6 +10,7 @@ import PageNotFound from './components/PageNotFound';
 import './App.css'
 import ErrorPage from './components/ErrorPage';
 import PostDetails from './components/user/PostDetails';
+import UpdatePostHandler from './components/user/UpdatePostHandler';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Route path="/profile/:id" element={<Profile />} errorElement={<ErrorPage />}/>
               <Route path="/post/:id" element={<PostDetails />} errorElement={<ErrorPage />}/>
               <Route path="/create-post" element={<CreatePost />}/>
+              <Route path="/update/post/:id" element={<UpdatePostHandler />}/>
             </Route>
           </Route>
           <Route path="/login" element={<Login />} />

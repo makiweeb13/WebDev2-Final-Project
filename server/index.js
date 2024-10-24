@@ -336,9 +336,9 @@ app.put('/posts/:id', async (req, res) => {
   const { title, rate, status, genres, mediums, synopsis, review, likes, dislikes } = req.body;
 
   const dataToUpdate = Object.fromEntries(
-    Object.entries({ title, rate, status, genres, mediums, synopsis, review, likes, dislikes })
+    Object.entries({ title, rate, status, synopsis, review, likes, dislikes })
           .filter(([_, value]) => value !== undefined)
-  );
+  )
 
   if (Object.keys(dataToUpdate).length === 0) {
     return res.status(400).json({ message: 'No fields provided to update' });
@@ -351,6 +351,38 @@ app.put('/posts/:id', async (req, res) => {
       },
       data: dataToUpdate
     })
+    
+    await prisma.postgenres.deleteMany({
+      where: {
+        post_id: id
+      }
+    })
+
+    await prisma.postmediums.deleteMany({
+      where: {
+        post_id: id
+      }
+    })
+
+    const postGenres = genres.map(genreId => ({
+      post_id: id,
+      genre_id: genreId
+    }))
+    await prisma.postgenres.createMany({
+      data: postGenres,
+      skipDuplicates: true
+    })
+
+    const postMediums = mediums.map(mediumId => ({
+      post_id: id,
+      medium_id: mediumId
+    }))
+
+    await prisma.postmediums.createMany({
+      data: postMediums,
+      skipDuplicates: true
+    })
+
     const updatedPost = await prisma.posts.findFirst({
       where: {
         id: post.id
@@ -379,6 +411,7 @@ app.put('/posts/:id', async (req, res) => {
         }
       }
     })
+    
     res.status(200).json({ message: 'Post updated successfully', post: updatedPost })
   } catch (error) {
     console.error('Error updating post: ', error);

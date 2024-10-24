@@ -1,16 +1,21 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router-dom";
+import useStore from "../../store/store";
 import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
 import { createPostSchema } from '../../schemas/createpost-schema';
 
-function CreatePost() {
+function UpdatePost({ post }) {
+    const { updatePost } = useStore();
     const navigate = useNavigate();
+        
 
     const onSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
-            const response = await fetch('http://localhost:5000/create-post', {
-                method: 'POST',
+            values.rate = parseInt(values.rate);
+            values.status = JSON.parse(values.status)
+            const response = await fetch(`http://localhost:5000/posts/${post.id}`, {
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
                 body: JSON.stringify(values)
@@ -18,26 +23,27 @@ function CreatePost() {
             const data = await response.json();
             if (response.ok) {
                 console.log(data.message);
+                updatePost(data.post)
                 resetForm();
                 setSubmitting(false) 
-                navigate('/');
+                navigate(`/post/${post.id}`);
             } else {
-                console.error('Creating post failed', data.message);
+                console.error('Updating post failed', data.message);
             }
         } catch(err) {
-            console.error('Creating post request failed:', err)
+            console.error('Updating post request failed:', err)
         }
     }
 
     const { values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue } = useFormik({
         initialValues: {
-            title: '',
-            rate: '',
-            status: '',
-            genres: [],
-            mediums: [],
-            synopsis: '',
-            review: ''
+            title: post.title,
+            rate: post.rate,
+            status: post.status,
+            genres: post.postgenres.map(genre => genre.genre_id),
+            mediums: post.postmediums.map(medium => medium.medium_id),
+            synopsis: post.synopsis,
+            review: post.review
         },
         validationSchema: createPostSchema,
         onSubmit
@@ -52,11 +58,13 @@ function CreatePost() {
         // Add the value if it's not selected
         setFieldValue(field, [...fieldValue, value]);
         }
-    };
-    
+    }
+
+    console.log(values)
+
     return (
         <main className="center-add-post">
-            <h2>Add Recommendation</h2>
+            <h2>Edit Post</h2>
             <form onSubmit={handleSubmit} className="add-post">
                 <label htmlFor="title">Title</label>
                 <input 
@@ -107,6 +115,7 @@ function CreatePost() {
                                     name="Action" 
                                     onChange={() => handleCheckboxChange('genres', 1)} 
                                     onBlur={handleBlur}
+                                    checked={values.genres.includes(1)}
                                 /> Action
                             </label>
                             <label>
@@ -115,6 +124,7 @@ function CreatePost() {
                                     name="Adventure" 
                                     onChange={() => handleCheckboxChange('genres', 2)}  
                                     onBlur={handleBlur} 
+                                    checked={values.genres.includes(2)}
                                 /> Adventure
                             </label>
                             <label>
@@ -123,6 +133,7 @@ function CreatePost() {
                                     name="Comedy" 
                                     onChange={() => handleCheckboxChange('genres', 3)} 
                                     onBlur={handleBlur} 
+                                    checked={values.genres.includes(3)}
                                 /> Comedy
                             </label>
                             <label>
@@ -130,7 +141,8 @@ function CreatePost() {
                                     type="checkbox" 
                                     name="Drama" 
                                     onChange={() => handleCheckboxChange('genres', 4)}  
-                                    onBlur={handleBlur} 
+                                    onBlur={handleBlur}
+                                    checked={values.genres.includes(4)} 
                                 /> Drama
                             </label>
                             <label>
@@ -139,6 +151,7 @@ function CreatePost() {
                                     name="Fantasy" 
                                     onChange={() => handleCheckboxChange('genres', 5)} 
                                     onBlur={handleBlur} 
+                                    checked={values.genres.includes(5)}
                                 /> Fantasy
                             </label>
                             <label>
@@ -147,6 +160,7 @@ function CreatePost() {
                                     name="Horror"  
                                     onChange={() => handleCheckboxChange('genres', 6)} 
                                     onBlur={handleBlur} 
+                                    checked={values.genres.includes(6)}
                                 /> Horror
                             </label>
                             <label>
@@ -155,6 +169,7 @@ function CreatePost() {
                                     name="Mystery" 
                                     onChange={() => handleCheckboxChange('genres', 7)}  
                                     onBlur={handleBlur} 
+                                    checked={values.genres.includes(7)}
                                 /> Mystery
                             </label>
                             <label>
@@ -163,6 +178,7 @@ function CreatePost() {
                                     name="Romance" 
                                     onChange={() => handleCheckboxChange('genres', 8)} 
                                     onBlur={handleBlur} 
+                                    checked={values.genres.includes(8)}
                                 /> Romance
                             </label>
                             <label>
@@ -171,6 +187,7 @@ function CreatePost() {
                                     name="Sci-Fi" 
                                     onChange={() => handleCheckboxChange('genres', 9)} 
                                     onBlur={handleBlur} 
+                                    checked={values.genres.includes(9)}
                                 /> Sci-Fi
                             </label>
                             <label>
@@ -179,6 +196,7 @@ function CreatePost() {
                                     name="Thriller" 
                                     onChange={() => handleCheckboxChange('genres', 10)} 
                                     onBlur={handleBlur} 
+                                    checked={values.genres.includes(10)}
                                 /> Thriller
                             </label>
                             <label>
@@ -187,6 +205,7 @@ function CreatePost() {
                                     name="Supernatural" 
                                     onChange={() => handleCheckboxChange('genres', 11)} 
                                     onBlur={handleBlur} 
+                                    checked={values.genres.includes(11)}
                                 /> Supernatural
                             </label>
                             <label>
@@ -195,6 +214,7 @@ function CreatePost() {
                                     name="Psychological" 
                                     onChange={() => handleCheckboxChange('genres', 12)} 
                                     onBlur={handleBlur} 
+                                    checked={values.genres.includes(12)}
                                 /> Psychological
                             </label>
                             <label>
@@ -203,6 +223,7 @@ function CreatePost() {
                                     name="Historical" 
                                     onChange={() => handleCheckboxChange('genres', 13)} 
                                     onBlur={handleBlur} 
+                                    checked={values.genres.includes(13)}
                                 /> Historical
                             </label>
                         </div>
@@ -214,14 +235,16 @@ function CreatePost() {
                                 <input 
                                     type="checkbox" 
                                     name="Movie"
-                                    onChange={() => handleCheckboxChange('mediums', 1)} 
+                                    onChange={() => handleCheckboxChange('mediums', 1)}
+                                    checked={values.mediums.includes(1)} 
                                 /> Movie
                             </label>
                             <label>
                                 <input 
                                     type="checkbox" 
                                     name="Anime"
-                                    onChange={() => handleCheckboxChange('mediums', 2)}  
+                                    onChange={() => handleCheckboxChange('mediums', 2)} 
+                                    checked={values.mediums.includes(2)}  
                                 /> Anime
                             </label>
                             <label>
@@ -229,13 +252,15 @@ function CreatePost() {
                                     type="checkbox" 
                                     name="Manga"
                                     onChange={() => handleCheckboxChange('mediums', 3)} 
+                                    checked={values.mediums.includes(3)} 
                                 /> Manga
                             </label>
                             <label>
                                 <input 
                                     type="checkbox" 
                                     name="Novel"
-                                    onChange={() => handleCheckboxChange('mediums', 4)} 
+                                    onChange={() => handleCheckboxChange('mediums', 4)}
+                                    checked={values.mediums.includes(4)}  
                                 /> Novel
                             </label>
                             <label>
@@ -243,6 +268,7 @@ function CreatePost() {
                                     type="checkbox" 
                                     name="Comic" 
                                     onChange={() => handleCheckboxChange('mediums', 5)} 
+                                    checked={values.mediums.includes(5)} 
                                 /> Comic
                             </label>
                             <label>
@@ -250,6 +276,7 @@ function CreatePost() {
                                     type="checkbox" 
                                     name="TV Show"
                                     onChange={() => handleCheckboxChange('mediums', 6)} 
+                                    checked={values.mediums.includes(6)} 
                                 /> TV Show
                             </label>
                             <label>
@@ -257,6 +284,7 @@ function CreatePost() {
                                     type="checkbox" 
                                     name="Video Game"
                                     onChange={() => handleCheckboxChange('mediums', 7)} 
+                                    checked={values.mediums.includes(7)} 
                                 /> Video Game
                             </label>
                             <label>
@@ -264,6 +292,7 @@ function CreatePost() {
                                     type="checkbox" 
                                     name="Webtoon" 
                                     onChange={() => handleCheckboxChange('mediums', 8)} 
+                                    checked={values.mediums.includes(8)} 
                                 /> Webtoon
                             </label>
                             <label>
@@ -271,6 +300,7 @@ function CreatePost() {
                                     type="checkbox" 
                                     name="Light Novel" 
                                     onChange={() => handleCheckboxChange('mediums', 9)} 
+                                    checked={values.mediums.includes(9)} 
                                 /> Light Novel
                             </label>
                             <label>
@@ -278,6 +308,7 @@ function CreatePost() {
                                     type="checkbox" 
                                     name="TV Series" 
                                     onChange={() => handleCheckboxChange('mediums', 10)} 
+                                    checked={values.mediums.includes(10)} 
                                 /> TV Series
                             </label>
                             <label>
@@ -285,6 +316,7 @@ function CreatePost() {
                                     type="checkbox" 
                                     name="Movie Series" 
                                     onChange={() => handleCheckboxChange('mediums', 11)} 
+                                    checked={values.mediums.includes(11)} 
                                 /> Movie Series
                             </label>
                         </div>
@@ -316,10 +348,10 @@ function CreatePost() {
                 { errors.rate && touched.rate && <p className='error-message'>{errors.rate}</p> }
                 { errors.status && touched.status && <p className='error-message'>{errors.status}</p> }
                 { errors.review && touched.review && <p className='error-message'>{errors.review}</p> }
-                <button type="submit">Post</button>
+                <button type="submit">Edit</button>
             </form>
         </main>
     )
 }
 
-export default CreatePost;
+export default UpdatePost;

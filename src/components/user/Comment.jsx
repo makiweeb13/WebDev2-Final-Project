@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useStore from '../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faThumbsDown, faReply, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { faThumbsUp, faThumbsDown, faReply, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import profile from '../../assets/profile-icon.png';
 import AddComment from './AddComment';
 import Cookies from 'js-cookie'; 
@@ -39,11 +39,18 @@ function Comment({ comment }) {
                     </div>
                     {
                         comment.user_id == userId &&
+                        <>
                         <div>
                             <Link>
-                            <FontAwesomeIcon icon={faEllipsisVertical} className="menu-icon" />
+                            <FontAwesomeIcon icon={faPenToSquare} className="menu-icon" />
                             </Link>
                         </div>
+                        <div>
+                            <Link>
+                            <FontAwesomeIcon icon={faTrash} className="menu-icon" />
+                            </Link>
+                        </div>
+                        </>
                     }
                 </div>
             </div>

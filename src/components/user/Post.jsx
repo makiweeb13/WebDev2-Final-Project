@@ -1,6 +1,6 @@
 import useStore from '../../store/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faThumbsUp, faThumbsDown, faComment, faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { faThumbsUp, faThumbsDown, faComment, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import profile from '../../assets/profile-icon.png';
 import Comment from './Comment';
 import Comments from './Comments';
@@ -45,12 +45,19 @@ function Post({ post, detailedMode }) {
                     <p className="date">{getDate(post.date)}</p>
                 </div>
                 <div className="post-content">
+                    <h4>Title:</h4>
                     <p className="title">{post.title}</p>
+                    <h4>Genre:</h4>
                     <p className="genres">{getGenres(post)}</p>
-                    <p className="status">{post.status}</p>
+                    <h4>Status:</h4>
+                    <p className="status">{post.status ? 'Completed' : 'Ongoing'}</p>
+                    <h4>Rate:</h4>
                     <p className="rate">{post.rate}/10</p>
+                    <h4>Medium:</h4>
                     <p className="medium">{getMediums(post)}</p>
+                    <h4>Synopsis:</h4>
                     <p className="synopsis">{post.synopsis}</p>
+                    <h4>Review:</h4>
                     <p className="review">{post.review}</p>
                 </div>
                 <div className="options">
@@ -70,11 +77,18 @@ function Post({ post, detailedMode }) {
                     </div>
                     {
                         post.user_id == userId &&
+                        <>
                         <div>
-                            <Link>
-                            <FontAwesomeIcon icon={faEllipsisVertical} className="menu-icon" />
+                            <Link to={`/update/post/${post.id}`}>
+                            <FontAwesomeIcon icon={faPenToSquare} className="menu-icon" />
                             </Link>
                         </div>
+                        <div>
+                            <Link>
+                            <FontAwesomeIcon icon={faTrash} className="menu-icon" />
+                            </Link>
+                        </div>
+                        </>
                     }
                 </div>
             </div>
