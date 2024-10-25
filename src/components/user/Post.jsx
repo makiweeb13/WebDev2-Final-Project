@@ -38,10 +38,10 @@ function Post({ post, detailedMode }) {
         <>
             <div className="post">
                 <div className="user-header">
-                    <div className='user'>
+                    <Link to={`/profile/${post.users.id}`} className='user'>
                         <img src={profile} alt="user profile" className='user-profile'/>
                         <p className="name">{post.users.username}</p>
-                    </div>
+                    </Link>
                     <p className="date">{getDate(post.date)}</p>
                 </div>
                 <div className="post-content">

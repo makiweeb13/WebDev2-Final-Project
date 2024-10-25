@@ -19,11 +19,11 @@ function Comment({ comment, preview }) {
         <>
             <div className="comment">
                 <div className="user-header">
-                    <div className='user'>
+                    <Link to={`/profile/${comment.users.id}`} className='user'>
                         <img src={profile} alt="user profile" className='user-profile'/>
                         <p className="comment-user-name">{comment.users.username}</p>
                         {comment.parent_id && <p>&nbsp;replying to {comment.comments.users.username}</p>}
-                    </div>
+                    </Link>
                     <p className="comment-date">{getDate(comment.date)}</p>
                 </div>
                 <p className="comment-content">{comment.content}</p>
