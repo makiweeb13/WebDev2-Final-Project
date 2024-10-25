@@ -10,11 +10,37 @@ import UpdateComment from './UpdateComment';
 
 function Comment({ comment, preview }) {
 
-    const { getDate } = useStore();
+    const { getDate, removeComment } = useStore();
     const [ toggleReply, setToggleReply ] = useState(false);
     const [ toggleEdit, setToggleEdit ] = useState(false);
     const userId = Cookies.get('userId');
     
+    const handleDelete = async () => {
+        const userConfirmed = window.confirm('Are you sure you want to delete this comment?');
+
+        if (!userConfirmed) {
+            return;
+        }
+        
+        try {
+            const response = await fetch(`http://localhost:5000/comments/${comment.id}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include'
+            })
+            const data = await response.json();
+            if (response.ok) {
+                console.log(data.message);
+                removeComment(comment.id)
+
+            } else {
+                console.error(`Comment delete failed:`, data.message);
+            }
+        } catch(err) {
+            console.error(`Comment delete request failed`, err)
+        }
+    }
+
     return (
         <>
             <div className="comment">
@@ -49,7 +75,7 @@ function Comment({ comment, preview }) {
                         </div>
                         <div>
                             <Link>
-                            <FontAwesomeIcon icon={faTrash} className="menu-icon" />
+                            <FontAwesomeIcon icon={faTrash} className="menu-icon" onClick={handleDelete} />
                             </Link>
                         </div>
                         </>

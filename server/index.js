@@ -524,6 +524,46 @@ app.put('/users/:id', async (req, res) => {
   }
 })
 
+app.delete('/posts/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    await prisma.posts.delete({
+      where: {
+        id: id
+      }
+    })
+    await prisma.postgenres.deleteMany({
+      where: {
+        post_id: id
+      }
+    })
+    await prisma.postmediums.deleteMany({
+      where: {
+        post_id: id
+      }
+    })
+    res.status(200).json({ message: 'Post deleted successfully' })
+  } catch (error) {
+    console.error('Error deleting post: ', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+})
+
+app.delete('/comments/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  try {
+    await prisma.comments.delete({
+      where: {
+        id: id
+      }
+    })
+    res.status(200).json({ message: 'Comment deleted successfully' })
+  } catch(error) {
+    console.error('Error deleting comment: ', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+})
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

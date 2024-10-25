@@ -59,6 +59,7 @@ const useStore = create((set, get) => ({
             comment.id === updatedComment.id ? updatedComment : comment
         ),
     })),
+    
     removeComment: (commentId) =>
         set((state) => ({
         comments: state.comments.filter(

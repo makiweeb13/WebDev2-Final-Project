@@ -9,7 +9,7 @@ import Cookies from 'js-cookie';
 
 function Post({ post, detailedMode }) {
 
-    const { comments, getDate, getGenres, getMediums, getMostPopularComment, updatePost } = useStore();
+    const { comments, getDate, getGenres, getMediums, getMostPopularComment, updatePost, removePost } = useStore();
     const popularComment = getMostPopularComment(post)
     const userId = Cookies.get('userId');
 
@@ -31,6 +31,32 @@ function Post({ post, detailedMode }) {
             }
         } catch(err) {
             console.error(`Post update request failed`, err)
+        }
+    }
+
+    const handleDelete = async () => {
+        const userConfirmed = window.confirm('Are you sure you want to delete this post?');
+
+        if (!userConfirmed) {
+            return;
+        }
+        
+        try {
+            const response = await fetch(`http://localhost:5000/posts/${post.id}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include'
+            })
+            const data = await response.json();
+            if (response.ok) {
+                console.log(data.message);
+                removePost(post.id)
+
+            } else {
+                console.error(`Post delete failed:`, data.message);
+            }
+        } catch(err) {
+            console.error(`Post delete request failed`, err)
         }
     }
 
@@ -85,7 +111,7 @@ function Post({ post, detailedMode }) {
                         </div>
                         <div>
                             <Link>
-                            <FontAwesomeIcon icon={faTrash} className="menu-icon" />
+                            <FontAwesomeIcon icon={faTrash} className="menu-icon" onClick={handleDelete} />
                             </Link>
                         </div>
                         </>
