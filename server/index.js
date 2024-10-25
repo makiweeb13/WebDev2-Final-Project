@@ -126,6 +126,16 @@ app.get('/users/:id', async (req, res) => {
                   }
                 }
               }
+            },
+            postgenres: {
+              include: {
+                genres: true
+              }
+            },
+            postmediums: {
+              include: {
+                mediums: true
+              }
             }
           }
         },
@@ -455,6 +465,61 @@ app.put('/comments/:id', async (req, res) => {
     res.status(200).json({ message: 'Comment updated successfully', comment: updatedComment })
   } catch (error) {
     console.error('Error updating comment: ', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+})
+
+app.put('/users/:id', async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { username, email, bio } = req.body
+
+  try {
+    const user = await prisma.users.update({
+      where: {
+        id: id
+      },
+      data: {
+        username,
+        email,
+        bio
+      }
+    })
+    const updatedUser = await prisma.users.findUnique({
+      where: {
+        id: user.id
+      },
+      include: {
+        posts: {
+          include: {
+            users: true, // Include user data for each post
+            comments: {
+              include: {
+                users: true, // Include user data for each comment
+                comments: {
+                  include: {
+                    users: true // Include user data for parent comment
+                  }
+                }
+              }
+            },
+            postgenres: {
+              include: {
+                genres: true
+              }
+            },
+            postmediums: {
+              include: {
+                mediums: true
+              }
+            }
+          }
+        },
+        comments: true
+      }
+    })
+    res.status(200).json({ message: 'User updated successfully', user: updatedUser })
+  } catch (error) {
+    console.error('Error updating user: ', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 })

@@ -79,7 +79,7 @@ function Post({ post, detailedMode }) {
                         post.user_id == userId &&
                         <>
                         <div>
-                            <Link to={`/update/post/${post.id}`}>
+                            <Link to={`/update-post/${post.id}`}>
                             <FontAwesomeIcon icon={faPenToSquare} className="menu-icon" />
                             </Link>
                         </div>

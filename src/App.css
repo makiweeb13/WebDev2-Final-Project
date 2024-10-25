@@ -372,6 +372,11 @@ input[type="number"] {
     margin: 10px 0;
 }
 
+.vertical-align {
+    display: flex;
+    flex-direction: column;
+}
+
 footer {
     background-color: #222;
     color: #ccc;

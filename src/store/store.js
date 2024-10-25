@@ -2,32 +2,22 @@ import { create } from 'zustand';
 
 // Define the Zustand store
 const useStore = create((set, get) => ({
+    user: null,
     users: [],
     posts: [],
     comments: [],
 
-    // Method to set the fetched data into Zustand store
-    initialize: (users, posts, comments) => set(() => ({
-        users: users,
-        posts: posts,
-        comments: comments,
+    setUser: (user) => set(() => ({
+        user: user
     })),
 
-    // Set posts 
     setPosts: (posts) => set(() => ({
         posts: posts
     })),
 
-    // Set comments 
     setComments: (comments) => set(() => ({
         comments: comments
     })),
-
-    // Get user
-    getUser: (userId) => {
-        const { users } = get();
-        return users.filter((user) => user.id == userId);
-    },
 
     // Getting parent comment
     getComment: (parentId) => {
@@ -35,31 +25,17 @@ const useStore = create((set, get) => ({
         return comments.filter((comment) => comment.id == parentId)[0];
     },
 
+    // Get number of comments
     getCommentsNum: (postId) => {
         const { comments } = get();
         return comments.filter((comment) => comment.post_id == postId).length;
     },
 
-    //Getting the date
+    //Getting the formatted date
     getDate: (date) => {
         return new Date(date).toLocaleDateString();
     },
 
-    // Actions for Users
-    addUser: (user) => set((state) => ({ users: [...state.users, user] })),
-
-    updateUser: (updatedUser) =>
-        set((state) => ({
-        users: state.users.map((user) =>
-            user.id === updatedUser.id ? updatedUser : user
-        ),
-    })),
-    removeUser: (userId) =>
-        set((state) => ({
-        users: state.users.filter((user) => user.id !== userId),
-    })),
-
-    // Actions for Posts
     addPost: (post) => set((state) => ({ posts: [...state.posts, post] })),
 
     updatePost: (updatedPost) =>
@@ -74,7 +50,6 @@ const useStore = create((set, get) => ({
         posts: state.posts.filter((post) => post.id !== postId),
     })),
 
-    // Actions for Comments
     addComment: (comment) =>
         set((state) => ({ comments: [...state.comments, comment] })),
 
@@ -91,16 +66,6 @@ const useStore = create((set, get) => ({
         ),
     })),
 
-    // Handling replies (comments on comments)
-    addReply: (commentId, reply) =>
-        set((state) => ({
-        comments: state.comments.map((comment) =>
-            comment.id === commentId
-            ? { ...comment, replies: [...(comment.replies || []), reply] }
-            : comment
-        ),
-    })),
-
     // list genres
     getGenres: (post) => {
         return post.postgenres.map(postgenre => postgenre.genres.name).join(', ');
@@ -111,7 +76,7 @@ const useStore = create((set, get) => ({
         return post.postmediums.map(postmedium => postmedium.mediums.name).join(', ');
     },
 
-    // get most popular comment
+    // gets the most popular comment
     getMostPopularComment: (post) => {
         if (post.comments) {
             return post.comments
