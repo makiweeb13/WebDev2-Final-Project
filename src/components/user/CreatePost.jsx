@@ -9,7 +9,7 @@ function CreatePost() {
 
     const onSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
-            const response = await fetch('http://localhost:5000/create-post', {
+            const response = await fetch('http://localhost:5000/posts', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
