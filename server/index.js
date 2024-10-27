@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const prisma = require('./prisma/client');
-dotenv.config();
+const { loginSchema, signupSchema, validator } = require('./middleware/validator');
 
 // Configure CORS to allow frontend origin and allow credentials
 const corsOptions = {
@@ -18,6 +18,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser()); 
+dotenv.config();
 
 const SECRET_KEY = process.env.JWT_SECRET;
 const PORT = process.env.PORT;
@@ -33,7 +34,7 @@ app.use('/posts', postsRoutes);
 app.use('/comments', commentsRoutes);
 
 // Registers a new user
-app.post('/signup', async (req, res) => {
+app.post('/signup', validator(signupSchema), async (req, res) => {
   
   const { username, email, password, bio, profile_picture } = req.body;
   try {
@@ -65,7 +66,7 @@ app.post('/signup', async (req, res) => {
 })
 
 // Logs in a user
-app.post('/login', async (req, res) => {
+app.post('/login', validator(loginSchema), async (req, res) => {
   const { email, password } = req.body;
   try {
     const findUser = await prisma.users.findFirst({
