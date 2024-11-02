@@ -1,6 +1,6 @@
 const prisma = require('../prisma/client');
 
-const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res, next) => {
     try {
       const users = await prisma.users.findMany({
         include: {
@@ -10,17 +10,16 @@ const getAllUsers = async (req, res) => {
       });
       res.status(200).json(users);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to fetch users' });
+      next(error);
     }
 }
 
-const getUser = async (req, res) => {
+const getUser = async (req, res, next) => {
     try {
-      const id  = req.params.id;
+      const id  = parseInt(req.params.id);
       const user = await prisma.users.findUnique({
         where: {
-          id: parseInt(id)
+          id: id
         },
         include: {
           posts: {
@@ -53,12 +52,11 @@ const getUser = async (req, res) => {
       });
       res.status(200).json(user);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to fetch user' });
+      next(error);
     }
 }
 
-const updateUser = async (req, res) => {
+const updateUser = async (req, res, next) => {
     const id = parseInt(req.params.id);
     const { username, email, bio } = req.body
   
@@ -108,8 +106,7 @@ const updateUser = async (req, res) => {
       })
       res.status(200).json({ message: 'User updated successfully', user: updatedUser })
     } catch (error) {
-      console.error('Error updating user: ', error);
-      res.status(500).json({ message: 'Internal server error' });
+      next(error);
     }
 }
 

@@ -1,6 +1,7 @@
 const prisma = require('../prisma/client');
+const { ThrowError } = require('../middleware/errorHandler');
 
-const getAllPosts = async (req, res) => {
+const getAllPosts = async (req, res, next) => {
     try {
       const posts = await prisma.posts.findMany({
         include: {
@@ -29,12 +30,11 @@ const getAllPosts = async (req, res) => {
       });
       res.status(200).json(posts);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to fetch posts' });
+      next(error);
     }
 }
 
-const getPost = async (req, res) => {
+const getPost = async (req, res, next) => {
     try {
       const id  = req.params.id;
       const post = await prisma.posts.findUnique({
@@ -67,12 +67,11 @@ const getPost = async (req, res) => {
       });
       res.status(200).json(post);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to fetch post' });
+      next(error);
     }
 }
 
-const createPost = async (req, res) => {
+const createPost = async (req, res, next) => {
     const { title, rate, status, genres, mediums, synopsis, review } = req.body;
     const user_id = req.user.id
   
@@ -109,12 +108,11 @@ const createPost = async (req, res) => {
       
       res.status(200).json({ message: 'Post created successfully'});
     } catch (error) {
-      console.error('Error creating post: ', error);
-      res.status(500).json({ message: 'Internal server error' });
+      next(error);
     }
 }
 
-const updatePost = async (req, res) => {
+const updatePost = async (req, res, next) => {
     const id = parseInt(req.params.id);
     const { title, rate, status, genres, mediums, synopsis, review, likes, dislikes } = req.body;
   
@@ -124,7 +122,7 @@ const updatePost = async (req, res) => {
     )
   
     if (Object.keys(dataToUpdate).length === 0) {
-      return res.status(400).json({ message: 'No fields provided to update' });
+      throw new ThrowError(400, 'No fields provided to update');
     }
   
     try {
@@ -166,7 +164,7 @@ const updatePost = async (req, res) => {
         skipDuplicates: true
       })
   
-      const updatedPost = await prisma.posts.findFirst({
+      const updatedPost = await prisma.posts.findUnique({
         where: {
           id: post.id
         },
@@ -197,12 +195,11 @@ const updatePost = async (req, res) => {
   
       res.status(200).json({ message: 'Post updated successfully', post: updatedPost })
     } catch (error) {
-      console.error('Error updating post: ', error);
-      res.status(500).json({ message: 'Internal server error' });
+      next(error);
     }
 }
 
-const deletePost = async (req, res) => {
+const deletePost = async (req, res, next) => {
     const id = parseInt(req.params.id);
     try {
       await prisma.posts.delete({
@@ -222,8 +219,7 @@ const deletePost = async (req, res) => {
       })
       res.status(200).json({ message: 'Post deleted successfully' })
     } catch (error) {
-      console.error('Error deleting post: ', error);
-      res.status(500).json({ message: 'Internal server error' });
+      next(error);
     }
 }
 

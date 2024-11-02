@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 const prisma = require('./prisma/client');
 const { loginSchema, signupSchema, validator } = require('./middleware/validator');
+const {ThrowError, errorHandler} = require('./middleware/errorHandler');
 
 // Configure CORS to allow frontend origin and allow credentials
 const corsOptions = {
@@ -14,10 +15,10 @@ const corsOptions = {
   credentials: true // Allow credentials (cookies, authorization headers)
 };
 
-// Middleware
+// Middleware 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use(cookieParser()); 
+app.use(cookieParser());
 dotenv.config();
 
 const SECRET_KEY = process.env.JWT_SECRET;
@@ -34,17 +35,17 @@ app.use('/posts', postsRoutes);
 app.use('/comments', commentsRoutes);
 
 // Registers a new user
-app.post('/signup', validator(signupSchema), async (req, res) => {
+app.post('/signup', validator(signupSchema), async (req, res, next) => {
   
   const { username, email, password, bio, profile_picture } = req.body;
   try {
-    const existingUser = await prisma.users.findFirst({
+    const existingUser = await prisma.users.findUnique({
       where: { 
         email: email
       }
     })
     if (existingUser) {
-      return res.status(400).json({ message: 'User with this email already exists' });
+      throw new ThrowError(400, `User with email ${email} already exists`);
     }
     
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -60,29 +61,28 @@ app.post('/signup', validator(signupSchema), async (req, res) => {
     })
     res.status(200).json({ message: 'User registered successfully' });
   } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    next(error)
   }
 })
 
 // Logs in a user
-app.post('/login', validator(loginSchema), async (req, res) => {
+app.post('/login', validator(loginSchema), async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const findUser = await prisma.users.findFirst({
+    const findUser = await prisma.users.findUnique({
       where: {
         email: email
       }
     })
 
     if (!findUser) {
-      return res.status(404).json({ message: 'User not found' });
+      throw new ThrowError(404, 'User not found');
     }
 
     const passwordMatched = await bcrypt.compare(password, findUser.password);
 
     if (!passwordMatched) {
-      return res.status(400).json({ message: 'Password mismatch' });
+      throw new ThrowError(400, 'Password mismatch');
     }
 
     const token = jwt.sign({ id: findUser.id, email: findUser.email }, SECRET_KEY, { expiresIn: '1h' })
@@ -91,8 +91,7 @@ app.post('/login', validator(loginSchema), async (req, res) => {
 
     res.status(200).json({ message: 'Login successful', user: { id: findUser.id, email: findUser.email } });
   } catch (error) {
-    console.error('Error logging in:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    next(error)
   }
 })
 
@@ -110,6 +109,8 @@ app.get('/check-auth', (req, res) => {
     return res.json({ isAuthenticated: true, user: user });
   })
 })
+
+app.use(errorHandler);
 
 // Start the server
 app.listen(PORT, () => {

@@ -1,6 +1,7 @@
 const prisma = require('../prisma/client');
+const { ThrowError } = require('../middleware/errorHandler');
 
-const getAllComments = async (req, res) => {
+const getAllComments = async (req, res, next) => {
     try {
       const comments = await prisma.comments.findMany({
         include: {
@@ -10,12 +11,11 @@ const getAllComments = async (req, res) => {
       });
       res.status(200).json(comments);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Failed to fetch comments' });
+      next(error);
     }
 }
 
-const createComment = async (req, res) => {
+const createComment = async (req, res, next) => {
     const { post_id, parent_id, content } = req.body;
     const user_id = req.user.id
   
@@ -28,7 +28,7 @@ const createComment = async (req, res) => {
           content
         }
       })
-      const findComment = await prisma.comments.findFirst({
+      const findComment = await prisma.comments.findUnique({
         where: {
           id: newComment.id
         },
@@ -43,12 +43,11 @@ const createComment = async (req, res) => {
       })
       res.status(200).json({ message: 'Comment added successfully', comment: findComment });
     } catch (error) {
-      console.error('Error adding comment: ', error);
-      res.status(500).json({ message: 'Internal server error' });
+      next(error);
     }
 }
 
-const updateComment = async (req, res) => {
+const updateComment = async (req, res, next) => {
     const id = parseInt(req.params.id);
     const { content, likes, dislikes } = req.body;
   
@@ -58,7 +57,7 @@ const updateComment = async (req, res) => {
     );
   
     if (Object.keys(dataToUpdate).length === 0) {
-      return res.status(400).json({ message: 'No fields provided to update' });
+      throw new ThrowError(400, 'No fields provided to update');
     }
   
     try {
@@ -68,7 +67,7 @@ const updateComment = async (req, res) => {
         },
         data: dataToUpdate
       })
-      const updatedComment = await prisma.comments.findFirst({
+      const updatedComment = await prisma.comments.findUnique({
         where: {
           id: comment.id
         },
@@ -83,12 +82,11 @@ const updateComment = async (req, res) => {
       })
       res.status(200).json({ message: 'Comment updated successfully', comment: updatedComment })
     } catch (error) {
-      console.error('Error updating comment: ', error);
-      res.status(500).json({ message: 'Internal server error' });
+      next(error);
     }
 }
 
-const deleteComment = async (req, res) => {
+const deleteComment = async (req, res, next) => {
     const id = parseInt(req.params.id);
     try {
       await prisma.comments.delete({
@@ -98,8 +96,7 @@ const deleteComment = async (req, res) => {
       })
       res.status(200).json({ message: 'Comment deleted successfully' })
     } catch(error) {
-      console.error('Error deleting comment: ', error);
-      res.status(500).json({ message: 'Internal server error' });
+      next(error);
     }
 }
 

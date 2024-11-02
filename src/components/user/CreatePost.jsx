@@ -33,7 +33,7 @@ function CreatePost() {
         initialValues: {
             title: '',
             rate: '',
-            status: '',
+            status: 'true',
             genres: [],
             mediums: [],
             synopsis: '',
