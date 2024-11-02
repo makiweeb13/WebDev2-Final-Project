@@ -7,7 +7,11 @@ function Posts() {
     const { posts } = useStore();
 
     const renderPosts = () => {
-        return posts.map(post => <Post key={post.id} post={post} />)
+        if (posts) {
+            return posts.map(post => <Post key={post.id} post={post} />)
+        } else {
+            return <p>No Posts Found :(</p>
+        }
     }
 
     return <div className="posts">{renderPosts()}</div>

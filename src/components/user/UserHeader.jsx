@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass, faHouse, faBell, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faHouse, faBell, faPlus } from "@fortawesome/free-solid-svg-icons";
 import profile from '../../assets/profile-icon.png';
 import Cookies from 'js-cookie';
+import SearchBar from '../SearchBar';
 
 function UserHeader() {
     const userId = Cookies.get('userId');
@@ -29,10 +30,7 @@ function UserHeader() {
     return (
         <header>
             <h1>Recco</h1>
-            <div className="search-bar">
-                <input type="search" name="search" id="search" placeholder="title, name of author, characters, ..."/>
-                <FontAwesomeIcon icon={faMagnifyingGlass} className="menu-icon" />
-            </div>
+            <SearchBar />
             <div className="user-options">
                 <Link to="/">
                     <FontAwesomeIcon icon={faHouse} className="menu-icon" />

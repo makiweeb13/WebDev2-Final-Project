@@ -6,6 +6,7 @@ const { postSchema, validator } = require('../middleware/validator');
 
 router.get('/', postsController.getAllPosts);
 router.get('/:id', postsController.getPost);
+router.post('/search', postsController.searchPosts);
 router.post('/', authenticateToken, validator(postSchema), postsController.createPost);
 router.put('/:id', authenticateToken, postsController.updatePost); 
 router.delete('/:id', authenticateToken, postsController.deletePost);

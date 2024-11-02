@@ -1,16 +1,11 @@
-import React from "react";
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import SearchBar from './SearchBar';
 
 function Header() {
     return (
         <header>
             <h1>Recco</h1>
-            <div className="search-bar">
-                <input type="search" name="search" id="search" placeholder="title, name of author, characters, ..."/>
-                <FontAwesomeIcon icon={faMagnifyingGlass} className="menu-icon"/>
-            </div>
+            <SearchBar />
             <div className="guest-options">
                 <Link to="/login">
                     <button>Login</button>

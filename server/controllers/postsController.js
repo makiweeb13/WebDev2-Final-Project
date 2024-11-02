@@ -4,6 +4,9 @@ const { ThrowError } = require('../middleware/errorHandler');
 const getAllPosts = async (req, res, next) => {
     try {
       const posts = await prisma.posts.findMany({
+        orderBy: {
+          date: 'desc'
+        },
         include: {
           users: true, // Include user data for each post
           comments: {
@@ -223,10 +226,53 @@ const deletePost = async (req, res, next) => {
     }
 }
 
+const searchPosts = async (req, res, next) => {
+  const { content } = req.body;
+  try {
+    const posts = await prisma.posts.findMany({
+      orderBy: {
+        date: 'desc'
+      },
+      where: {
+        title: {
+          contains: content
+        }
+      },
+      include: {
+        users: true, // Include user data for each post
+        comments: {
+          include: {
+            users: true, // Include user data for each comment
+            comments: {
+              include: {
+                users: true // Include user data for parent comment
+              }
+            }
+          }
+        },
+        postgenres: {
+          include: {
+            genres: true
+          }
+        },
+        postmediums: {
+          include: {
+            mediums: true
+          }
+        }
+      },
+    });
+    res.status(200).json(posts);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
     getAllPosts,
     getPost,
     createPost,
     updatePost,
-    deletePost
+    deletePost,
+    searchPosts
 }

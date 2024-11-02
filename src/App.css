@@ -172,6 +172,7 @@ main {
     left: 50%;
     transform: translate(-50%, -50%);
     color: #fff;
+    max-width: 350px;
 }
 
 .page form {
