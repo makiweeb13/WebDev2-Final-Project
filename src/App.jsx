@@ -7,11 +7,12 @@ import MainContent from './components/user/MainContent';
 import Profile from './components/user/Profile';
 import CreatePost from './components/user/CreatePost';
 import PageNotFound from './components/PageNotFound';
-import './App.css'
 import ErrorPage from './components/ErrorPage';
 import PostDetails from './components/user/PostDetails';
 import UpdatePostHandler from './components/user/UpdatePostHandler';
 import UpdateProfileHandler from './components/user/UpdateProfileHandler';
+import GuestOnlyRoutes from './util/GuestOnlyRoutes';
+import './App.css';
 
 function App() {
   return (
@@ -28,8 +29,10 @@ function App() {
               <Route path="/update-profile/:id" element={<UpdateProfileHandler />}/>
             </Route>
           </Route>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route element={<GuestOnlyRoutes />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Route>
           <Route path="*" element={<PageNotFound />}/>
         </Routes>
       </div>

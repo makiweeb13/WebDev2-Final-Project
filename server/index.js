@@ -110,6 +110,13 @@ app.get('/check-auth', (req, res) => {
   })
 })
 
+app.post('/logout', (req, res) => {
+   // Clear the JWT cookie
+   res.clearCookie('token', { httpOnly: true, secure: true, sameSite: 'strict' });
+  
+   res.status(200).json({ message: 'Logged out successfully' });
+})
+
 app.use(errorHandler);
 
 // Start the server

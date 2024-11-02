@@ -107,7 +107,7 @@ function CreatePost() {
                                     name="Action" 
                                     onChange={() => handleCheckboxChange('genres', 1)} 
                                     onBlur={handleBlur}
-                                /> Action
+                                /> &nbsp; Action
                             </label>
                             <label>
                                 <input 
@@ -115,7 +115,7 @@ function CreatePost() {
                                     name="Adventure" 
                                     onChange={() => handleCheckboxChange('genres', 2)}  
                                     onBlur={handleBlur} 
-                                /> Adventure
+                                /> &nbsp; Adventure
                             </label>
                             <label>
                                 <input 
@@ -123,7 +123,7 @@ function CreatePost() {
                                     name="Comedy" 
                                     onChange={() => handleCheckboxChange('genres', 3)} 
                                     onBlur={handleBlur} 
-                                /> Comedy
+                                /> &nbsp; Comedy
                             </label>
                             <label>
                                 <input 
@@ -131,7 +131,7 @@ function CreatePost() {
                                     name="Drama" 
                                     onChange={() => handleCheckboxChange('genres', 4)}  
                                     onBlur={handleBlur} 
-                                /> Drama
+                                /> &nbsp; Drama
                             </label>
                             <label>
                                 <input 
@@ -139,7 +139,7 @@ function CreatePost() {
                                     name="Fantasy" 
                                     onChange={() => handleCheckboxChange('genres', 5)} 
                                     onBlur={handleBlur} 
-                                /> Fantasy
+                                /> &nbsp; Fantasy
                             </label>
                             <label>
                                 <input 
@@ -147,7 +147,7 @@ function CreatePost() {
                                     name="Horror"  
                                     onChange={() => handleCheckboxChange('genres', 6)} 
                                     onBlur={handleBlur} 
-                                /> Horror
+                                /> &nbsp; Horror
                             </label>
                             <label>
                                 <input 
@@ -155,7 +155,7 @@ function CreatePost() {
                                     name="Mystery" 
                                     onChange={() => handleCheckboxChange('genres', 7)}  
                                     onBlur={handleBlur} 
-                                /> Mystery
+                                /> &nbsp; Mystery
                             </label>
                             <label>
                                 <input 
@@ -163,7 +163,7 @@ function CreatePost() {
                                     name="Romance" 
                                     onChange={() => handleCheckboxChange('genres', 8)} 
                                     onBlur={handleBlur} 
-                                /> Romance
+                                /> &nbsp; Romance
                             </label>
                             <label>
                                 <input 
@@ -171,7 +171,7 @@ function CreatePost() {
                                     name="Sci-Fi" 
                                     onChange={() => handleCheckboxChange('genres', 9)} 
                                     onBlur={handleBlur} 
-                                /> Sci-Fi
+                                /> &nbsp; Sci-Fi
                             </label>
                             <label>
                                 <input 
@@ -179,7 +179,7 @@ function CreatePost() {
                                     name="Thriller" 
                                     onChange={() => handleCheckboxChange('genres', 10)} 
                                     onBlur={handleBlur} 
-                                /> Thriller
+                                /> &nbsp; Thriller
                             </label>
                             <label>
                                 <input 
@@ -187,7 +187,7 @@ function CreatePost() {
                                     name="Supernatural" 
                                     onChange={() => handleCheckboxChange('genres', 11)} 
                                     onBlur={handleBlur} 
-                                /> Supernatural
+                                /> &nbsp; Supernatural
                             </label>
                             <label>
                                 <input 
@@ -195,7 +195,7 @@ function CreatePost() {
                                     name="Psychological" 
                                     onChange={() => handleCheckboxChange('genres', 12)} 
                                     onBlur={handleBlur} 
-                                /> Psychological
+                                /> &nbsp; Psychological
                             </label>
                             <label>
                                 <input 
@@ -203,7 +203,7 @@ function CreatePost() {
                                     name="Historical" 
                                     onChange={() => handleCheckboxChange('genres', 13)} 
                                     onBlur={handleBlur} 
-                                /> Historical
+                                /> &nbsp; Historical
                             </label>
                         </div>
                     </div>
@@ -215,77 +215,77 @@ function CreatePost() {
                                     type="checkbox" 
                                     name="Movie"
                                     onChange={() => handleCheckboxChange('mediums', 1)} 
-                                /> Movie
+                                /> &nbsp; Movie
                             </label>
                             <label>
                                 <input 
                                     type="checkbox" 
                                     name="Anime"
                                     onChange={() => handleCheckboxChange('mediums', 2)}  
-                                /> Anime
+                                /> &nbsp; Anime
                             </label>
                             <label>
                                 <input 
                                     type="checkbox" 
                                     name="Manga"
                                     onChange={() => handleCheckboxChange('mediums', 3)} 
-                                /> Manga
+                                /> &nbsp; Manga
                             </label>
                             <label>
                                 <input 
                                     type="checkbox" 
                                     name="Novel"
                                     onChange={() => handleCheckboxChange('mediums', 4)} 
-                                /> Novel
+                                /> &nbsp; Novel
                             </label>
                             <label>
                                 <input 
                                     type="checkbox" 
                                     name="Comic" 
                                     onChange={() => handleCheckboxChange('mediums', 5)} 
-                                /> Comic
+                                /> &nbsp; Comic
                             </label>
                             <label>
                                 <input 
                                     type="checkbox" 
                                     name="TV Show"
                                     onChange={() => handleCheckboxChange('mediums', 6)} 
-                                /> TV Show
+                                /> &nbsp; TV Show
                             </label>
                             <label>
                                 <input 
                                     type="checkbox" 
                                     name="Video Game"
                                     onChange={() => handleCheckboxChange('mediums', 7)} 
-                                /> Video Game
+                                /> &nbsp; Video Game
                             </label>
                             <label>
                                 <input 
                                     type="checkbox" 
                                     name="Webtoon" 
                                     onChange={() => handleCheckboxChange('mediums', 8)} 
-                                /> Webtoon
+                                /> &nbsp; Webtoon
                             </label>
                             <label>
                                 <input 
                                     type="checkbox" 
                                     name="Light Novel" 
                                     onChange={() => handleCheckboxChange('mediums', 9)} 
-                                /> Light Novel
+                                /> &nbsp; Light Novel
                             </label>
                             <label>
                                 <input 
                                     type="checkbox" 
                                     name="TV Series" 
                                     onChange={() => handleCheckboxChange('mediums', 10)} 
-                                /> TV Series
+                                /> &nbsp; TV Series
                             </label>
                             <label>
                                 <input 
                                     type="checkbox" 
                                     name="Movie Series" 
                                     onChange={() => handleCheckboxChange('mediums', 11)} 
-                                /> Movie Series
+                                /> &nbsp; Movie Series
                             </label>
                         </div>
                     </div>
