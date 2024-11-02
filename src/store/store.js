@@ -3,6 +3,9 @@ import { create } from 'zustand';
 // Define the Zustand store
 const useStore = create((set, get) => ({
     user: null,
+    page: 1,
+    search: '',
+    totalPages: 0,
     users: [],
     posts: [],
     comments: [],
@@ -85,7 +88,19 @@ const useStore = create((set, get) => ({
                 .sort((a, b) => a.likes > b.likes ? 1 : a.likes < b.likes ? -1 : 0)[0];
         }
         return null;
-    }
+    },
+
+    setPage: (page) => set(() => ({
+        page: page
+    })),
+
+    setSearch: (search) => set(() => ({
+        search: search
+    })),
+
+    setTotalPages: (totalPages) => set(() => ({
+        totalPages: totalPages
+    }))
 }));
 
 export default useStore;

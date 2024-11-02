@@ -314,12 +314,7 @@ select:focus {
 
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
     margin: 0;
-}
-
-input[type="number"] {
-    -moz-appearance: textfield;
 }
 
 .profile {
@@ -385,6 +380,10 @@ input[type="number"] {
 .user {
     text-decoration: none !important;
     color: #fff
+}
+
+.center {
+    text-align: center;
 }
 
 footer {

@@ -2,39 +2,65 @@ const prisma = require('../prisma/client');
 const { ThrowError } = require('../middleware/errorHandler');
 
 const getAllPosts = async (req, res, next) => {
-    try {
-      const posts = await prisma.posts.findMany({
-        orderBy: {
-          date: 'desc'
-        },
-        include: {
-          users: true, // Include user data for each post
-          comments: {
-            include: {
-              users: true, // Include user data for each comment
-              comments: {
-                include: {
-                  users: true // Include user data for parent comment
-                }
+  const { search, page } = req.query
+  const limit = 2;
+  const skip = (parseInt(page || 1) - 1) * limit;
+
+  try {
+    const totalPosts = await prisma.posts.count({
+      where: {
+        title: {
+          contains: search || ''
+        }
+      }
+    })
+
+    const posts = await prisma.posts.findMany({
+      orderBy: {
+        date: 'desc'
+      },
+      skip: skip,
+      take: limit,
+      where: {
+        title: {
+          contains: search || ''
+        }
+      },
+      include: {
+        users: true, // Include user data for each post
+        comments: {
+          include: {
+            users: true, // Include user data for each comment
+            comments: {
+              include: {
+                users: true // Include user data for parent comment
               }
-            }
-          },
-          postgenres: {
-            include: {
-              genres: true
-            }
-          },
-          postmediums: {
-            include: {
-              mediums: true
             }
           }
         },
-      });
-      res.status(200).json(posts);
-    } catch (error) {
-      next(error);
-    }
+        postgenres: {
+          include: {
+            genres: true
+          }
+        },
+        postmediums: {
+          include: {
+            mediums: true
+          }
+        }
+      },
+    });
+
+    res.status(200).json({
+      totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
+      currentPage: page,
+      posts
+    });
+
+  } catch (error) {
+    next(error);
+  }
 }
 
 const getPost = async (req, res, next) => {
@@ -226,53 +252,10 @@ const deletePost = async (req, res, next) => {
     }
 }
 
-const searchPosts = async (req, res, next) => {
-  const { content } = req.body;
-  try {
-    const posts = await prisma.posts.findMany({
-      orderBy: {
-        date: 'desc'
-      },
-      where: {
-        title: {
-          contains: content
-        }
-      },
-      include: {
-        users: true, // Include user data for each post
-        comments: {
-          include: {
-            users: true, // Include user data for each comment
-            comments: {
-              include: {
-                users: true // Include user data for parent comment
-              }
-            }
-          }
-        },
-        postgenres: {
-          include: {
-            genres: true
-          }
-        },
-        postmediums: {
-          include: {
-            mediums: true
-          }
-        }
-      },
-    });
-    res.status(200).json(posts);
-  } catch (error) {
-    next(error);
-  }
-}
-
 module.exports = {
     getAllPosts,
     getPost,
     createPost,
     updatePost,
-    deletePost,
-    searchPosts
+    deletePost
 }
