@@ -8,19 +8,19 @@ datasource db {
 }
 
 model comments {
-  id             Int        @id @default(autoincrement())
-  post_id        Int
-  user_id        Int
-  parent_id      Int?
-  content        String     @db.Text
-  image          String?    @db.VarChar(255)
-  likes          Int?       @default(0)
-  dislikes       Int?       @default(0)
-  date           DateTime   @default(now()) @db.DateTime(0)
-  posts          posts      @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "comments_ibfk_1")
-  users          users      @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "comments_ibfk_2")
-  comments       comments?  @relation("commentsTocomments", fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "comments_ibfk_3")
-  other_comments comments[] @relation("commentsTocomments")
+  id              Int               @id @default(autoincrement())
+  post_id         Int
+  user_id         Int
+  parent_id       Int?
+  content         String            @db.Text
+  image           String?           @db.VarChar(255)
+  date            DateTime          @default(now()) @db.DateTime(0)
+  commentdislikes commentdislikes[]
+  commentlikes    commentlikes[]
+  posts           posts             @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "comments_ibfk_1")
+  users           users             @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "comments_ibfk_2")
+  comments        comments?         @relation("commentsTocomments", fields: [parent_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "comments_ibfk_3")
+  other_comments  comments[]        @relation("commentsTocomments")
 
   @@index([parent_id], map: "parent_id")
   @@index([post_id], map: "post_id")
@@ -28,34 +28,38 @@ model comments {
 }
 
 model posts {
-  id          Int           @id @default(autoincrement())
-  user_id     Int
-  date        DateTime      @default(now()) @db.Timestamp(0)
-  title       String        @db.VarChar(255)
-  status      Boolean?      @default(true)
-  rate        Int           @db.TinyInt
-  synopsis    String?       @db.Text
-  review      String?       @db.Text
-  image       String?       @db.VarChar(255)
-  likes       Int?          @default(0)
-  dislikes    Int?          @default(0)
-  comments    comments[]
-  postgenres  postgenres[]
-  postmediums postmediums[]
-  users       users         @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "posts_ibfk_1")
+  id           Int            @id @default(autoincrement())
+  user_id      Int
+  date         DateTime       @default(now()) @db.Timestamp(0)
+  title        String         @db.VarChar(255)
+  status       Boolean?       @default(true)
+  rate         Int            @db.TinyInt
+  synopsis     String?        @db.Text
+  review       String?        @db.Text
+  image        String?        @db.VarChar(255)
+  comments     comments[]
+  postdislikes postdislikes[]
+  postgenres   postgenres[]
+  postlikes    postlikes[]
+  postmediums  postmediums[]
+  users        users          @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "posts_ibfk_1")
 
   @@index([user_id], map: "user_id")
 }
 
 model users {
-  id              Int        @id @default(autoincrement())
-  username        String     @db.VarChar(50)
-  email           String     @unique(map: "email") @db.VarChar(100)
-  password        String     @db.VarChar(255)
-  bio             String?    @db.Text
-  profile_picture String?    @db.VarChar(255)
-  created_at      DateTime   @default(now()) @db.Timestamp(0)
+  id              Int               @id @default(autoincrement())
+  username        String            @db.VarChar(50)
+  email           String            @unique(map: "email") @db.VarChar(100)
+  password        String            @db.VarChar(255)
+  bio             String?           @db.Text
+  profile_picture String?           @db.VarChar(255)
+  created_at      DateTime          @default(now()) @db.Timestamp(0)
+  commentdislikes commentdislikes[]
+  commentlikes    commentlikes[]
   comments        comments[]
+  postdislikes    postdislikes[]
+  postlikes       postlikes[]
   posts           posts[]
 }
 
@@ -89,4 +93,52 @@ model postmediums {
 
   @@id([post_id, medium_id])
   @@index([medium_id], map: "medium_id")
+}
+
+model postdislikes {
+  id      Int      @id @default(autoincrement())
+  post_id Int
+  user_id Int
+  date    DateTime @default(now()) @db.Timestamp(0)
+  posts   posts    @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "postdislikes_ibfk_1")
+  users   users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "postdislikes_ibfk_2")
+
+  @@unique([post_id, user_id], map: "unique_dislike")
+  @@index([user_id], map: "user_id")
+}
+
+model postlikes {
+  id      Int      @id @default(autoincrement())
+  post_id Int
+  user_id Int
+  date    DateTime @default(now()) @db.Timestamp(0)
+  posts   posts    @relation(fields: [post_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "postlikes_ibfk_1")
+  users   users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "postlikes_ibfk_2")
+
+  @@unique([post_id, user_id], map: "unique_like")
+  @@index([user_id], map: "user_id")
+}
+
+model commentdislikes {
+  id         Int      @id @default(autoincrement())
+  comment_id Int
+  user_id    Int
+  date       DateTime @default(now()) @db.Timestamp(0)
+  comments   comments @relation(fields: [comment_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "commentdislikes_ibfk_1")
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "commentdislikes_ibfk_2")
+
+  @@unique([comment_id, user_id], map: "unique_dislike")
+  @@index([user_id], map: "user_id")
+}
+
+model commentlikes {
+  id         Int      @id @default(autoincrement())
+  comment_id Int
+  user_id    Int
+  date       DateTime @default(now()) @db.Timestamp(0)
+  comments   comments @relation(fields: [comment_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "commentlikes_ibfk_1")
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "commentlikes_ibfk_2")
+
+  @@unique([comment_id, user_id], map: "unique_like")
+  @@index([user_id], map: "user_id")
 }

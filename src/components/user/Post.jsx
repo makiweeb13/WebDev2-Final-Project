@@ -88,11 +88,11 @@ function Post({ post, detailedMode }) {
                 </div>
                 <div className="options">
                     <div className="likes">
-                        <p>{post.likes}&nbsp;</p>
+                        <p>{post.postlikes.length}&nbsp;</p>
                         <FontAwesomeIcon icon={faThumbsUp} className="menu-icon" onClick={() => handleLikes({ likes: ++post.likes })} />
                     </div>
                     <div className="dislikes">
-                        <p>{post.dislikes}&nbsp;</p>
+                        <p>{post.postdislikes.length}&nbsp;</p>
                         <FontAwesomeIcon icon={faThumbsDown} className="menu-icon" onClick={() => handleLikes({ dislikes: ++post.dislikes })} />
                     </div>
                     <div>

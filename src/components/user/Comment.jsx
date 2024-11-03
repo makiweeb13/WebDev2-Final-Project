@@ -55,11 +55,11 @@ function Comment({ comment, preview }) {
                 <p className="comment-content">{comment.content}</p>
                 <div className="options">
                     <div>
-                        <p className="comment-likes">{comment.likes}&nbsp;</p>
+                        <p className="comment-likes">{comment.commentlikes.length}&nbsp;</p>
                         <FontAwesomeIcon icon={faThumbsUp} className="menu-icon"/>
                     </div>
                     <div>
-                        <p className="comment-dislikes">{comment.dislikes}&nbsp;</p>
+                        <p className="comment-dislikes">{comment.commentdislikes.length}&nbsp;</p>
                         <FontAwesomeIcon icon={faThumbsDown} className="menu-icon"/>
                     </div>
                     <div>

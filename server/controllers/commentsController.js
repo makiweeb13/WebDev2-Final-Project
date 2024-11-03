@@ -6,7 +6,7 @@ const getAllComments = async (req, res, next) => {
       const comments = await prisma.comments.findMany({
         include: {
           posts: true, // Include related post for each comment
-          users: true, // Include related user for each comment
+          users: true // Include related user for each comment
         },
       });
       res.status(200).json(comments);

@@ -35,6 +35,18 @@ const getAllPosts = async (req, res, next) => {
               include: {
                 users: true // Include user data for parent comment
               }
+            },
+            commentlikes: {
+              include: {
+                users: true,
+                comments: true
+              }
+            },
+            commentdislikes: {
+              include: {
+                users: true,
+                comments: true
+              }
             }
           }
         },
@@ -46,6 +58,18 @@ const getAllPosts = async (req, res, next) => {
         postmediums: {
           include: {
             mediums: true
+          }
+        },
+        postlikes: {
+          include: {
+            users: true,
+            posts: true
+          }
+        },
+        postdislikes: {
+          include: {
+            users: true,
+            posts: true
           }
         }
       },
@@ -79,6 +103,18 @@ const getPost = async (req, res, next) => {
                 include: {
                   users: true // Include user data for parent comment
                 }
+              },
+              commentlikes: {
+                include: {
+                  users: true,
+                  comments: true
+                }
+              },
+              commentdislikes: {
+                include: {
+                  users: true,
+                  comments: true
+                }
               }
             }
           },
@@ -90,6 +126,18 @@ const getPost = async (req, res, next) => {
           postmediums: {
             include: {
               mediums: true
+            }
+          },
+          postlikes: {
+            include: {
+              users: true,
+              posts: true
+            }
+          },
+          postdislikes: {
+            include: {
+              users: true,
+              posts: true
             }
           }
         }
