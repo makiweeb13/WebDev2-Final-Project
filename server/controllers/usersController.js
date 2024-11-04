@@ -23,6 +23,9 @@ const getUser = async (req, res, next) => {
         },
         include: {
           posts: {
+            orderBy: {
+              date: 'desc'
+            },
             include: {
               users: true, // Include user data for each post
               comments: {
@@ -31,6 +34,18 @@ const getUser = async (req, res, next) => {
                   comments: {
                     include: {
                       users: true // Include user data for parent comment
+                    }
+                  },
+                  commentlikes: {
+                    include: {
+                      users: true,
+                      comments: true
+                    }
+                  },
+                  commentdislikes: {
+                    include: {
+                      users: true,
+                      comments: true
                     }
                   }
                 }
@@ -43,6 +58,18 @@ const getUser = async (req, res, next) => {
               postmediums: {
                 include: {
                   mediums: true
+                }
+              },
+              postlikes: {
+                include: {
+                  users: true,
+                  posts: true
+                }
+              },
+              postdislikes: {
+                include: {
+                  users: true,
+                  posts: true
                 }
               }
             }
@@ -61,6 +88,7 @@ const updateUser = async (req, res, next) => {
     const { username, email, bio } = req.body
   
     try {
+      
       const user = await prisma.users.update({
         where: {
           id: id
@@ -71,12 +99,16 @@ const updateUser = async (req, res, next) => {
           bio
         }
       })
+
       const updatedUser = await prisma.users.findUnique({
         where: {
           id: user.id
         },
         include: {
           posts: {
+            orderBy: {
+              date: 'desc'
+            },
             include: {
               users: true, // Include user data for each post
               comments: {
@@ -85,6 +117,18 @@ const updateUser = async (req, res, next) => {
                   comments: {
                     include: {
                       users: true // Include user data for parent comment
+                    }
+                  },
+                  commentlikes: {
+                    include: {
+                      users: true,
+                      comments: true
+                    }
+                  },
+                  commentdislikes: {
+                    include: {
+                      users: true,
+                      comments: true
                     }
                   }
                 }
@@ -97,6 +141,18 @@ const updateUser = async (req, res, next) => {
               postmediums: {
                 include: {
                   mediums: true
+                }
+              },
+              postlikes: {
+                include: {
+                  users: true,
+                  posts: true
+                }
+              },
+              postdislikes: {
+                include: {
+                  users: true,
+                  posts: true
                 }
               }
             }

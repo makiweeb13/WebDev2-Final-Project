@@ -13,24 +13,39 @@ function Post({ post, detailedMode }) {
     const popularComment = getMostPopularComment(post)
     const userId = Cookies.get('userId');
 
-    const handleLikes = async (value) => {
+    const handlePostLikes = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/posts/${post.id}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                credentials: 'include',
-                body: JSON.stringify(value)
+            const response = await fetch(`http://localhost:5000/posts/action?post=${post.id}&mode=like`, {
+                method: 'POST',
+                credentials: 'include'
             })
             const data = await response.json();
             if (response.ok) {
-                updatePost(data.post)
+                updatePost(data.post);
                 console.log(data.message);
-
             } else {
-                console.error(`Post update failed:`, data.message);
+                console.error(`Like action failed:`, data.message);
             }
         } catch(err) {
-            console.error(`Post update request failed`, err)
+            console.error(`Like request failed`, err);
+        }
+    }
+
+    const handlePostDislikes = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/posts/action?post=${post.id}&mode=dislike`, {
+                method: 'POST',
+                credentials: 'include'
+            })
+            const data = await response.json();
+            if (response.ok) {
+                updatePost(data.post);
+                console.log(data.message);
+            } else {
+                console.error(`Dislike action failed:`, data.message);
+            }
+        } catch(err) {
+            console.error(`Dislike request failed`, err);
         }
     }
 
@@ -56,7 +71,7 @@ function Post({ post, detailedMode }) {
                 console.error(`Post delete failed:`, data.message);
             }
         } catch(err) {
-            console.error(`Post delete request failed`, err)
+            console.error(`Post delete request failed`, err);
         }
     }
 
@@ -89,11 +104,11 @@ function Post({ post, detailedMode }) {
                 <div className="options">
                     <div className="likes">
                         <p>{post.postlikes.length}&nbsp;</p>
-                        <FontAwesomeIcon icon={faThumbsUp} className="menu-icon" onClick={() => handleLikes({ likes: ++post.likes })} />
+                        <FontAwesomeIcon icon={faThumbsUp} className="menu-icon" onClick={handlePostLikes} />
                     </div>
                     <div className="dislikes">
                         <p>{post.postdislikes.length}&nbsp;</p>
-                        <FontAwesomeIcon icon={faThumbsDown} className="menu-icon" onClick={() => handleLikes({ dislikes: ++post.dislikes })} />
+                        <FontAwesomeIcon icon={faThumbsDown} className="menu-icon" onClick={handlePostDislikes} />
                     </div>
                     <div>
                         <p>{post.comments.length}&nbsp;</p>
