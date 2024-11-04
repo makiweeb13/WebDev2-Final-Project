@@ -6,6 +6,7 @@ const { commentSchema, validator } = require('../middleware/validator');
 
 router.get('/', commentsController.getAllComments);
 router.post('/', authenticateToken, validator(commentSchema), commentsController.createComment);
+router.post('/action', authenticateToken, commentsController.createCommentLike);
 router.put('/:id', authenticateToken, commentsController.updateComment);
 router.delete('/:id', authenticateToken, commentsController.deleteComment);
 

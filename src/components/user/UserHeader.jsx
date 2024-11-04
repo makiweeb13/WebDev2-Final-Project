@@ -29,15 +29,15 @@ function UserHeader() {
 
     return (
         <header>
-            <h1>Recco</h1>
+            <h1 className="app-name">recco</h1>
             <SearchBar />
             <div className="user-options">
                 <Link to="/">
                     <FontAwesomeIcon icon={faHouse} className="menu-icon" />
                 </Link>
-                <Link>
+                {/* <Link>
                     <FontAwesomeIcon icon={faBell} className="menu-icon" />
-                </Link>
+                </Link> */}
                 <Link to="/create-post">
                     <button className="create-post-btn">
                         <p><FontAwesomeIcon icon={faPlus} /> Create</p>

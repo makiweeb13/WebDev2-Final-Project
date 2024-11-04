@@ -4,7 +4,7 @@ import SearchBar from './SearchBar';
 function Header() {
     return (
         <header>
-            <h1>Recco</h1>
+            <h1 className="app-name">recco</h1>
             <SearchBar />
             <div className="guest-options">
                 <Link to="/login">

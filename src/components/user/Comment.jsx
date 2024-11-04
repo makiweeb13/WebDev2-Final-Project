@@ -10,10 +10,46 @@ import UpdateComment from './UpdateComment';
 
 function Comment({ comment, preview }) {
 
-    const { getDate, removeComment } = useStore();
+    const { getDate, removeComment, updateComment } = useStore();
     const [ toggleReply, setToggleReply ] = useState(false);
     const [ toggleEdit, setToggleEdit ] = useState(false);
     const userId = Cookies.get('userId');
+
+    const handleCommentLikes = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/comments/action?comment=${comment.id}&mode=like`, {
+                method: 'POST',
+                credentials: 'include'
+            })
+            const data = await response.json();
+            if (response.ok) {
+                updateComment(data.comment);
+                console.log(data.message);
+            } else {
+                console.error(`Like action failed:`, data.message);
+            }
+        } catch(err) {
+            console.error(`Like request failed`, err);
+        }
+    }
+
+    const handleCommentDislikes = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/comments/action?comment=${comment.id}&mode=dislike`, {
+                method: 'POST',
+                credentials: 'include'
+            })
+            const data = await response.json();
+            if (response.ok) {
+                updateComment(data.comment);
+                console.log(data.message);
+            } else {
+                console.error(`Dislike action failed:`, data.message);
+            }
+        } catch(err) {
+            console.error(`Dislike request failed`, err);
+        }
+    }
     
     const handleDelete = async () => {
         const userConfirmed = window.confirm('Are you sure you want to delete this comment?');
@@ -56,11 +92,11 @@ function Comment({ comment, preview }) {
                 <div className="options">
                     <div>
                         <p className="comment-likes">{comment.commentlikes.length}&nbsp;</p>
-                        <FontAwesomeIcon icon={faThumbsUp} className="menu-icon"/>
+                        <FontAwesomeIcon icon={faThumbsUp} className="menu-icon" onClick={handleCommentLikes} />
                     </div>
                     <div>
                         <p className="comment-dislikes">{comment.commentdislikes.length}&nbsp;</p>
-                        <FontAwesomeIcon icon={faThumbsDown} className="menu-icon"/>
+                        <FontAwesomeIcon icon={faThumbsDown} className="menu-icon" onClick={handleCommentDislikes} />
                     </div>
                     <div>
                         <FontAwesomeIcon icon={faReply} className="menu-icon" onClick={() => setToggleReply(!toggleReply)}/>

@@ -100,9 +100,119 @@ const deleteComment = async (req, res, next) => {
     }
 }
 
+const createCommentLike = async (req, res, next) => {
+  const user_id = req.user.id
+  const { comment, mode } = req.query
+  const comment_id = parseInt(comment)
+
+  try {
+    const like = await prisma.commentlikes.findUnique({
+      where: {
+        comment_id_user_id: {
+          comment_id,
+          user_id
+        }
+      }
+    })
+
+    const dislike = await prisma.commentdislikes.findUnique({
+      where: {
+        comment_id_user_id: {
+          comment_id,
+          user_id
+        }
+      }
+    })
+
+    if (mode === 'like') {
+      if (like) { 
+        // Undo like if comment already liked
+        await prisma.commentlikes.delete({
+          where: {
+            id: like.id
+          }
+        })
+      } else { 
+        // Proceed to like comment
+        await prisma.commentlikes.create({
+        data: {
+          comment_id,
+          user_id
+        }
+        })
+        // Undo dislike if comment already disliked
+        if (dislike) {
+          await prisma.commentdislikes.delete({
+            where: {
+              id: dislike.id
+            }
+          })
+        }
+      }
+    } 
+    else if (mode === 'dislike') {
+      if (dislike) {
+        // Undo dislike if comment already disliked
+        await prisma.commentdislikes.delete({
+          where: {
+            id: dislike.id
+          }
+        })
+      } else {
+        // Proceed to dislike comment
+        await prisma.commentdislikes.create({
+          data: {
+            comment_id,
+            user_id
+          }
+        })
+        // Undo like if comment already liked
+        if (like) {
+          await prisma.commentlikes.delete({
+            where: {
+              id: like.id
+            }
+          })
+        }
+      }
+    }
+
+    const comment = await prisma.comments.findUnique({
+      where: {
+        id: comment_id
+      },
+      include: {
+        users: true,
+        comments: {
+          include: {
+            users: true
+          }
+        },
+        commentlikes: {
+          include: {
+            users: true,
+            comments: true
+          }
+        },
+        commentdislikes: {
+          include: {
+            users: true,
+            comments: true
+          }
+        }
+      }
+    })
+
+    res.status(200).json({ message: 'Comment liked/disliked successfully', comment })
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
     getAllComments,
     createComment,
     updateComment,
-    deleteComment
+    deleteComment,
+    createCommentLike
 }
