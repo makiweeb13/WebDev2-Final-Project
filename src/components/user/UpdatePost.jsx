@@ -74,7 +74,7 @@ function UpdatePost({ post }) {
                     value={values.title} 
                     onChange={handleChange} 
                     onBlur={handleBlur}
-                />
+                /> <br />
                 <label htmlFor="rate">Rate</label>
                 <select 
                     id="rate" 

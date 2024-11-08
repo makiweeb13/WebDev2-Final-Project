@@ -25,7 +25,7 @@ function Profile() {
                 setIsLoading(false);
             })
             .catch(err => {
-                throw Error('User Not Found')
+                throw new Response('User Not Found', { status: 404 })
             })
     }, [id])
     

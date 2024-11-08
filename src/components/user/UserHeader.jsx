@@ -40,12 +40,12 @@ function UserHeader() {
                 </Link> */}
                 <Link to="/create-post">
                     <button className="create-post-btn">
-                        <p><FontAwesomeIcon icon={faPlus} /> Create</p>
+                        <p><FontAwesomeIcon icon={faPlus}/> <span className="show-btn-label">Create</span></p>
                     </button>
                 </Link>
                 <div className="dropdown align-right">
                     <img src={profile} alt="user profile" className="user-menu-profile"/>
-                    <div className="dropdown-content">
+                    <div className="dropdown-content move-left">
                         
                         <label>
                             <Link to={`/profile/${userId}`} className="user">Profile</Link>

@@ -4,7 +4,7 @@ function ErrorPage() {
     const error = useRouteError();
 
     return (
-        <main className="error">
+        <main className="error error-page">
             <h3>Error</h3>
             <p>{error.message}</p>
             <Link to="/">Back to Homepage</Link>
