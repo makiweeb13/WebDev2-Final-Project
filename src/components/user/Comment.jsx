@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 import { Link } from 'react-router-dom';
 import UpdateComment from './UpdateComment';
 
-function Comment({ comment, preview }) {
+function Comment({ comment, preview, setComment }) {
 
     const { getDate, removeComment, updateComment } = useStore();
     const [ toggleReply, setToggleReply ] = useState(false);
@@ -24,6 +24,7 @@ function Comment({ comment, preview }) {
             const data = await response.json();
             if (response.ok) {
                 updateComment(data.comment);
+                setComment(data.comment);
                 console.log(data.message);
             } else {
                 console.error(`Like action failed:`, data.message);
@@ -42,6 +43,7 @@ function Comment({ comment, preview }) {
             const data = await response.json();
             if (response.ok) {
                 updateComment(data.comment);
+                setComment(data.comment);
                 console.log(data.message);
             } else {
                 console.error(`Dislike action failed:`, data.message);
@@ -104,6 +106,7 @@ function Comment({ comment, preview }) {
                     {
                         comment.user_id == userId && !preview &&
                         <>
+                        
                         <div>
                             <Link>
                             <FontAwesomeIcon icon={faPenToSquare} className="menu-icon" onClick={() => setToggleEdit(!toggleEdit)}/>

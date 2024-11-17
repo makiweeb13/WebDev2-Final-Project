@@ -31,7 +31,7 @@ function PostDetails() {
             <main>
                 <FontAwesomeIcon icon={faArrowLeft} className="menu-icon" onClick={() => navigate(-1)}/>
                 <div className="posts">
-                    <Post key={id} post={post} detailedMode={true}/>
+                    <Post key={id} post={post} detailedMode={true} setPost={setPost}/>
                 </div>
                 <AddComment postId={id}/>
             </main>

@@ -11,7 +11,7 @@ function Login() {
 
     const onSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
-            const response = await fetch('http://localhost:5000/login', {
+            const response = await fetch('http://localhost:5000/users/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',

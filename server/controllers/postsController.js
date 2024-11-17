@@ -1,80 +1,14 @@
-const prisma = require('../prisma/client');
 const { ThrowError } = require('../middleware/errorHandler');
+const postsService = require('../services/postsService');
 
-const getAllPosts = async (req, res, next) => {
+const getAllPostsController = async (req, res, next) => {
   const { search, page } = req.query
   const limit = 2;
   const skip = (parseInt(page || 1) - 1) * limit;
 
   try {
-    const totalPosts = await prisma.posts.count({
-      where: {
-        title: {
-          contains: search || ''
-        }
-      }
-    })
-
-    const posts = await prisma.posts.findMany({
-      orderBy: {
-        date: 'desc'
-      },
-      skip: skip,
-      take: limit,
-      where: {
-        title: {
-          contains: search || ''
-        }
-      },
-      include: {
-        users: true, // Include user data for each post
-        comments: {
-          include: {
-            users: true, // Include user data for each comment
-            comments: {
-              include: {
-                users: true // Include user data for parent comment
-              }
-            },
-            commentlikes: {
-              include: {
-                users: true,
-                comments: true
-              }
-            },
-            commentdislikes: {
-              include: {
-                users: true,
-                comments: true
-              }
-            }
-          }
-        },
-        postgenres: {
-          include: {
-            genres: true
-          }
-        },
-        postmediums: {
-          include: {
-            mediums: true
-          }
-        },
-        postlikes: {
-          include: {
-            users: true,
-            posts: true
-          }
-        },
-        postdislikes: {
-          include: {
-            users: true,
-            posts: true
-          }
-        }
-      },
-    });
-
+    const totalPosts = await postsService.getTotalPosts(search);
+    const posts = await postsService.getAllPosts(skip, limit, search);
     res.status(200).json({
       totalPosts,
       totalPages: Math.ceil(totalPosts / limit),
@@ -87,109 +21,29 @@ const getAllPosts = async (req, res, next) => {
   }
 }
 
-const getPost = async (req, res, next) => {
+const getPostController = async (req, res, next) => {
     try {
-      const id  = req.params.id;
-      const post = await prisma.posts.findUnique({
-        where: {
-          id: parseInt(id)
-        },
-        include: {
-          users: true,
-          comments: {
-            include: {
-              users: true, // Include user data for each comment
-              comments: {
-                include: {
-                  users: true // Include user data for parent comment
-                }
-              },
-              commentlikes: {
-                include: {
-                  users: true,
-                  comments: true
-                }
-              },
-              commentdislikes: {
-                include: {
-                  users: true,
-                  comments: true
-                }
-              }
-            }
-          },
-          postgenres: {
-            include: {
-              genres: true
-            }
-          },
-          postmediums: {
-            include: {
-              mediums: true
-            }
-          },
-          postlikes: {
-            include: {
-              users: true,
-              posts: true
-            }
-          },
-          postdislikes: {
-            include: {
-              users: true,
-              posts: true
-            }
-          }
-        }
-      });
+      const id  = parseInt(req.params.id);
+      const post = await postsService.getPost(id);
       res.status(200).json(post);
     } catch (error) {
       next(error);
     }
 }
 
-const createPost = async (req, res, next) => {
+const createPostController = async (req, res, next) => {
     const { title, rate, status, genres, mediums, synopsis, review } = req.body;
     const user_id = req.user.id
-  
+
     try {
-      const post = await prisma.posts.create({
-        data: {
-          title,
-          user_id,
-          date: new Date(),
-          rate: parseInt(rate),
-          status: JSON.parse(status),
-          synopsis: synopsis || null,
-          review
-        }
-      })
-  
-      const postGenres = genres.map(genreId => ({
-        post_id: post.id,
-        genre_id: genreId
-      }))
-      await prisma.postgenres.createMany({
-        data: postGenres,
-        skipDuplicates: true
-      })
-  
-      const postMediums = mediums.map(mediumId => ({
-        post_id: post.id,
-        medium_id: mediumId
-      }))
-      await prisma.postmediums.createMany({
-        data: postMediums,
-        skipDuplicates: true
-      })
-      
+      await postsService.createPost(title, user_id, rate, status, genres, mediums, synopsis, review)
       res.status(200).json({ message: 'Post created successfully'});
     } catch (error) {
       next(error);
     }
 }
 
-const updatePost = async (req, res, next) => {
+const updatePostController = async (req, res, next) => {
     const id = parseInt(req.params.id);
     const { title, rate, status, genres, mediums, synopsis, review } = req.body;
   
@@ -203,96 +57,8 @@ const updatePost = async (req, res, next) => {
     }
   
     try {
-      const post = await prisma.posts.update({
-        where: {
-          id: id
-        },
-        data: dataToUpdate
-      })
-      
-      await prisma.postgenres.deleteMany({
-        where: {
-          post_id: id
-        }
-      })
-  
-      await prisma.postmediums.deleteMany({
-        where: {
-          post_id: id
-        }
-      })
-  
-      const postGenres = genres.map(genreId => ({
-        post_id: id,
-        genre_id: genreId
-      }))
-      await prisma.postgenres.createMany({
-        data: postGenres,
-        skipDuplicates: true
-      })
-  
-      const postMediums = mediums.map(mediumId => ({
-        post_id: id,
-        medium_id: mediumId
-      }))
-  
-      await prisma.postmediums.createMany({
-        data: postMediums,
-        skipDuplicates: true
-      })
-  
-      const updatedPost = await prisma.posts.findUnique({
-        where: {
-          id: post.id
-        },
-        include: {
-          users: true,
-          comments: {
-            include: {
-              users: true, // Include user data for each comment
-              comments: {
-                include: {
-                  users: true // Include user data for parent comment
-                }
-              },
-              commentlikes: {
-                include: {
-                  users: true,
-                  comments: true
-                }
-              },
-              commentdislikes: {
-                include: {
-                  users: true,
-                  comments: true
-                }
-              }
-            }
-          },
-          postgenres: {
-            include: {
-              genres: true
-            }
-          },
-          postmediums: {
-            include: {
-              mediums: true
-            }
-          },
-          postlikes: {
-            include: {
-              users: true,
-              posts: true
-            }
-          },
-          postdislikes: {
-            include: {
-              users: true,
-              posts: true
-            }
-          }
-        }
-      })
+      await postsService.updatePost(id, dataToUpdate, genres, mediums);
+      const updatedPost = await postsService.getPost(id);
   
       res.status(200).json({ message: 'Post updated successfully', post: updatedPost })
     } catch (error) {
@@ -300,160 +66,24 @@ const updatePost = async (req, res, next) => {
     }
 }
 
-const deletePost = async (req, res, next) => {
+const deletePostController = async (req, res, next) => {
     const id = parseInt(req.params.id);
     try {
-      await prisma.posts.delete({
-        where: {
-          id: id
-        }
-      })
-      await prisma.postgenres.deleteMany({
-        where: {
-          post_id: id
-        }
-      })
-      await prisma.postmediums.deleteMany({
-        where: {
-          post_id: id
-        }
-      })
+      await postsService.deletePost(id);
       res.status(200).json({ message: 'Post deleted successfully' })
     } catch (error) {
       next(error);
     }
 }
 
-const createPostLike = async (req, res, next) => {
+const createPostLikeController = async (req, res, next) => {
   const user_id = req.user.id
   const { post, mode } = req.query
   const post_id = parseInt(post)
 
   try {
-    const like = await prisma.postlikes.findUnique({
-      where: {
-        post_id_user_id: {
-          post_id,
-          user_id
-        }
-      }
-    })
-
-    const dislike = await prisma.postdislikes.findUnique({
-      where: {
-        post_id_user_id: {
-          post_id,
-          user_id
-        }
-      }
-    })
-
-    if (mode === 'like') {
-      if (like) { 
-        // Undo like if post already liked
-        await prisma.postlikes.delete({
-          where: {
-            id: like.id
-          }
-        })
-      } else { 
-        // Proceed to like post
-        await prisma.postlikes.create({
-        data: {
-          post_id,
-          user_id
-        }
-        })
-        // Undo dislike if post already disliked
-        if (dislike) {
-          await prisma.postdislikes.delete({
-            where: {
-              id: dislike.id
-            }
-          })
-        }
-      }
-    } 
-    else if (mode === 'dislike') {
-      if (dislike) {
-        // Undo dislike if post already disliked
-        await prisma.postdislikes.delete({
-          where: {
-            id: dislike.id
-          }
-        })
-      } else {
-        // Proceed to dislike post
-        await prisma.postdislikes.create({
-          data: {
-            post_id,
-            user_id
-          }
-        })
-        // Undo like if post already liked
-        if (like) {
-          await prisma.postlikes.delete({
-            where: {
-              id: like.id
-            }
-          })
-        }
-      }
-    }
-
-    const post = await prisma.posts.findUnique({
-      where: {
-        id: post_id
-      },
-      include: {
-        users: true,
-        comments: {
-          include: {
-            users: true, // Include user data for each comment
-            comments: {
-              include: {
-                users: true // Include user data for parent comment
-              }
-            },
-            commentlikes: {
-              include: {
-                users: true,
-                comments: true
-              }
-            },
-            commentdislikes: {
-              include: {
-                users: true,
-                comments: true
-              }
-            }
-          }
-        },
-        postgenres: {
-          include: {
-            genres: true
-          }
-        },
-        postmediums: {
-          include: {
-            mediums: true
-          }
-        },
-        postlikes: {
-          include: {
-            users: true,
-            posts: true
-          }
-        },
-        postdislikes: {
-          include: {
-            users: true,
-            posts: true
-          }
-        }
-      }
-    });
-
+    await postsService.createPostLike(user_id, post_id, mode);
+    const post = await postsService.getPost(post_id);
     res.status(200).json({ message: 'Post liked/disliked successfully', post })
   } catch (error) {
     next(error);
@@ -461,10 +91,10 @@ const createPostLike = async (req, res, next) => {
 }
 
 module.exports = {
-    getAllPosts,
-    getPost,
-    createPost,
-    updatePost,
-    deletePost,
-    createPostLike
+    getAllPostsController,
+    getPostController,
+    createPostController,
+    updatePostController,
+    deletePostController,
+    createPostLikeController
 }

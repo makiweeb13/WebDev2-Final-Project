@@ -34,7 +34,7 @@ function UpdateProfile() {
         initialValues: {
             username: user.username,
             email: user.email,
-            bio: user.bio
+            bio: user.bio ? user.bio : ''
         },
         validationSchema: profileSchema,
         onSubmit

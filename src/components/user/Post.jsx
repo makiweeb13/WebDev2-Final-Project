@@ -6,11 +6,12 @@ import Comment from './Comment';
 import Comments from './Comments';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { useState } from 'react';
 
-function Post({ post, detailedMode }) {
+function Post({ post, detailedMode, setPost }) {
 
     const { comments, getDate, getGenres, getMediums, getMostPopularComment, updatePost, removePost } = useStore();
-    const popularComment = getMostPopularComment(post)
+    const [ comment, setComment ] = useState(getMostPopularComment(post));
     const userId = Cookies.get('userId');
 
     const handlePostLikes = async () => {
@@ -22,6 +23,7 @@ function Post({ post, detailedMode }) {
             const data = await response.json();
             if (response.ok) {
                 updatePost(data.post);
+                setPost(data.post);
                 console.log(data.message);
             } else {
                 console.error(`Like action failed:`, data.message);
@@ -40,6 +42,7 @@ function Post({ post, detailedMode }) {
             const data = await response.json();
             if (response.ok) {
                 updatePost(data.post);
+                setPost(data.post);
                 console.log(data.message);
             } else {
                 console.error(`Dislike action failed:`, data.message);
@@ -134,7 +137,7 @@ function Post({ post, detailedMode }) {
                 </div>
             </div>
             { detailedMode && <Comments comments={comments} /> }
-            { !detailedMode && popularComment && <Comment key={popularComment.id} comment={popularComment} preview={true}/> }
+            { !detailedMode && comment && <Comment key={comment.id} comment={comment} preview={true} setComment={setComment}/> }
         </>
     )
 }

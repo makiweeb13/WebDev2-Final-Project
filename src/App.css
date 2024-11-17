@@ -105,6 +105,7 @@ main {
     max-width: 800px;
     align-self: center;
     padding: 20px;
+    margin: 10px;
 }
 
 .post-content {
@@ -132,7 +133,7 @@ main {
     max-width: 750px;
     align-self: center;
     padding: 10px 20px;
-    margin: 10px;
+    margin-bottom: 20px;
    
 }
 
@@ -214,11 +215,11 @@ input:-webkit-autofill {
 .page form button {
     position: relative;
     left: 80%;
+    margin-bottom: 30px;
 }
 
 .page form p {
     text-align: center;
-    margin-top: 20px; 
 }
 
 .link {

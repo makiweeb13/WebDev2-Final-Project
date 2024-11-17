@@ -8,7 +8,7 @@ function Signup() {
     const navigate = useNavigate();
 
     const onSubmit = (values, { setSubmitting, resetForm }) => {
-        fetch('http://localhost:5000/signup', {
+        fetch('http://localhost:5000/users/signup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(values)
@@ -50,7 +50,6 @@ function Signup() {
                     className={errors.username && touched.username ? 'input-error' : ''}
                 />
                 <br />
-                { errors.username && touched.username && <p className='error-message'>{errors.username}</p> }
                 <input 
                     type="email" 
                     name="email" 
@@ -62,7 +61,6 @@ function Signup() {
                     className={errors.email && touched.email ? 'input-error' : ''}
                 />
                 <br />
-                { errors.email && touched.email && <p className='error-message'>{errors.email}</p> }
                 <input 
                     type="password" 
                     name="password" 
@@ -74,7 +72,6 @@ function Signup() {
                     className={errors.password && touched.password ? 'input-error' : ''}
                 />
                 <br />
-                 { errors.password && touched.password && <p className='error-message'>{errors.password}</p> }
                 <input 
                     type="password" 
                     name="confirmPassword" 
@@ -86,6 +83,9 @@ function Signup() {
                     className={errors.confirmPassword && touched.confirmPassword ? 'input-error' : ''}
                 />
                 <br />
+                { errors.username && touched.username && <p className='error-message'>{errors.username}</p> }
+                { errors.email && touched.email && <p className='error-message'>{errors.email}</p> }
+                { errors.password && touched.password && <p className='error-message'>{errors.password}</p> }
                 { errors.confirmPassword && touched.confirmPassword && <p className='error-message'>{errors.confirmPassword}</p> }
                 <br />
                 <button type="submit">Sign Up</button>
