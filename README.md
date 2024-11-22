@@ -20,3 +20,5 @@ Recco is a social media platform designed for users to share and recommend their
 
 **Database:**
 - **MySQL**: An open-source relational database management system.
+
+**Note:**: Import existing database located on the database folder.
